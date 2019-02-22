@@ -1,1 +1,1 @@
-from .client import BulletCli
+from .client import Bullet
