@@ -4,7 +4,7 @@ foreground = {
     "green"  : "\u001b[32m",
     "yellow" : "\u001b[33m",
     "blue"   : "\u001b[34m",
-    "mageta" : "\u001b[35m",
+    "magenta" : "\u001b[35m",
     "cyan"   : "\u001b[36m",
     "white"  : "\u001b[37m",
 }
@@ -15,7 +15,7 @@ background = {
     "green"  : "\u001b[42m",
     "yellow" : "\u001b[43m",
     "blue"   : "\u001b[44m",
-    "mageta" : "\u001b[45m",
+    "magenta" : "\u001b[45m",
     "cyan"   : "\u001b[46m",
     "white"  : "\u001b[47m",
 }

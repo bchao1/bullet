@@ -17,7 +17,8 @@ class BulletCli:
             pad_right                 = 0,
             indent: int               = 0,
             align                     = 0,
-            margin: int               = 0
+            margin: int               = 0,
+            shift: int                = 0,
         ):
 
         if not choices:
@@ -33,6 +34,7 @@ class BulletCli:
         self.indent = indent
         self.align = align
         self.margin = margin
+        self.shift = shift
 
         self.bullet = bullet
         self.bullet_color = bullet_color
@@ -87,6 +89,7 @@ class BulletCli:
     def launch(self, prompt = ""):
         if prompt:
             utils.forceWrite(' ' * self.indent + prompt + '\n')
+            utils.forceWrite('\n' * self.shift)
         self.renderBullets()
         utils.moveCursorUp(len(self.choices))
         cursor.hide_cursor()

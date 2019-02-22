@@ -1,4 +1,4 @@
-# `bullets` : A Robust Python List Prompt Package
+# `bullets` : Beautiful Python List Prompts Made Easy
 <p align=center>
 <img src="./assets/list.png" width="400"/>
 <br>
@@ -9,7 +9,7 @@
 </p>
 
 ***
-> 🎨 Customize bullet list prompts in your CLI tool without effecting previous or future outputs.
+> 🎨 Customize bullet list prompts in your Python CLI tool without effecting previous or future outputs.
 ***
 
 <p align=center><img src="./assets/demo.gif" width="600"/></p>
