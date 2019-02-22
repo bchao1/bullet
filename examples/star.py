@@ -1,5 +1,5 @@
-from bullets import Bullet
-from bullets import colors
+from bullet import Bullet
+from bullet import colors
 
 cli = Bullet(
         choices = ["apple", "banana", "orange", "watermelon", "strawberry"], 

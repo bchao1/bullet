@@ -1,4 +1,4 @@
-# `bullets` : Beautiful Python List Prompts Made Easy
+# `bullet` : Beautiful Python List Prompts Made Easy
 <p align=center>
 <img src="./assets/list.png" width="400"/>
 <br>
@@ -13,7 +13,7 @@
 ***
 
 ```python
-from bullets import Bullet
+from bullet import Bullet
 
 cli = Bullet(...)
 result = cli.launch(prompt)
@@ -27,7 +27,7 @@ result = cli.launch(prompt)
 
 ## Setup
 ```shell
-$ pip install bullets
+$ pip install bullet
 ```
 
 ## Documentation
@@ -36,7 +36,7 @@ $ pip install bullets
 
 ### Using `bullets`
 ```python
-from bullets import Bullet
+from bullet import Bullet
 cli = Bullet()  # Create a Bullet object
 result = cli.launch()  # Launch a list prompt
 ```
