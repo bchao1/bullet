@@ -78,3 +78,7 @@ white_background = colors.background["white"]
 - `align`
 - `margin`
 - `shift`
+
+<p align=center>
+<img src="./assets/formatting.png" width="600"/>
+</p>
