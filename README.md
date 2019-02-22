@@ -34,7 +34,7 @@ $ pip install bullet
 
 > 👷 To fully customize your list prompt, you'll have to take total control of formatting and colors. Here's what you need to know.
 
-### Using `bullets`
+### Using `bullet`
 ```python
 from bullet import Bullet
 cli = Bullet()  # Create a Bullet object
@@ -53,7 +53,7 @@ cli = Bullet(bullet = "★")
 
 ### Customize Colors
 ```python
-from bullets import colors
+from bullet import colors
 ```
 > 🎨 The following colors are supported in `bullets`. 
 ```
