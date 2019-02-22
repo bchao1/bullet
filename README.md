@@ -65,19 +65,21 @@ black_foreground = colors.foreground["black"]
 white_background = colors.background["white"]
 ```
 > 🎨 Define the following colors when initializing the `Bullet` object.
-- `bullet_color`
-- `word_color`
-- `word_on_switch`
-- `background_color`
-- `background_on_switch`
+- Use foreground colors:
+    - `bullet_color`
+    - `word_color`
+    - `word_on_switch`
+- Use background colors:
+    - `background_color`
+    - `background_on_switch`
 
 ### Formatting
 > 📐 Define the following when initializaing the `Bullet` object.
-- `indent`
-- `pad_right`
-- `align`
-- `margin`
-- `shift`
+- `indent`: distance from left-boundary to start of prompt.
+- `pad_right`: extended background length.
+- `align`: distance between bullet and start of prompt.
+- `margin`: distance between list item and bullets.
+- `shift`: number of new lines between prompt and first item.
 
 <p align=center>
 <img src="./assets/formatting.png" width="600"/>
