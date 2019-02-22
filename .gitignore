@@ -1,2 +1,5 @@
 ./__pycache__
 ./bullets/__pycache__
+./build
+./bullet.egg-info
+./dist
