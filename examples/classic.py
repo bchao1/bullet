@@ -1,13 +1,13 @@
-from bullets import BulletCli
+from bullets import Bullet
 from bullets import colors
 
-cli = BulletCli(
+cli = Bullet(
         choices = ["apple", "banana", "orange", "watermelon", "strawberry"], 
         indent = 0,
         align = 5, 
         margin = 2,
         shift = 0,
-        bullet = " ",
+        bullet = "",
         bullet_color=colors.foreground["white"],
         word_color=colors.foreground["white"],
         word_on_switch=colors.foreground["black"],

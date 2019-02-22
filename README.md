@@ -9,19 +9,72 @@
 </p>
 
 ***
-> 🎨 Customize bullet list prompts in your Python CLI tool without effecting previous or future outputs.
+> 🎨 Customize bullet list prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, and etc.
 ***
 
-<p align=center><img src="./assets/demo.gif" width="600"/></p>
-
-## Usage
-
 ```python
-from bullets import BulletCli
+from bullets import Bullet
 
-cli = BulletCli()
-result = cli.launch(prompt = "Choose from a list: ")
-print(result)
+cli = Bullet(...)
+result = cli.launch(prompt)
 ```
 
-## Examples
+<p align=center>
+<img src="./assets/gifs/classic.gif" width="200"/>
+<img src="./assets/gifs/colorful.gif" width="200"/>
+<img src="./assets/gifs/star.gif" width="200"/>
+</p>
+
+## Setup
+```shell
+$ pip install bullets
+```
+
+## Documentation
+
+> 👷 To fully customize your list prompt, you'll have to take total control of formatting and colors. Here's what you need to know.
+
+### Using `bullets`
+```python
+from bullets import Bullet
+cli = Bullet()  # Create a Bullet object
+result = cli.launch()  # Launch a list prompt
+```
+
+### Defining Choices
+```python
+cli = Bullet(choices = ["first item", "second item", "thrid item"])
+```
+
+### Customize Bullets
+```python
+cli = Bullet(bullet = "★")
+```
+
+### Customize Colors
+```python
+from bullets import colors
+```
+> 🎨 The following colors are supported in `bullets`. 
+```
+black, red, green, yellow, blue, magenta, cyan, white
+```
+> 🎨 Remember to specify `foreground` and `background`.
+```python
+black_foreground = colors.foreground["black"]
+white_background = colors.background["white"]
+```
+> 🎨 Define the following colors when initializing the `Bullet` object.
+- `bullet_color`
+- `word_color`
+- `word_on_switch`
+- `background_color`
+- `background_on_switch`
+
+### Formatting
+> 📐 Define the following when initializaing the `Bullet` object.
+- `indent`
+- `pad_right`
+- `align`
+- `margin`
+- `shift`

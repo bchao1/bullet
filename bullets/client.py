@@ -4,12 +4,12 @@ from . import colors
 from . import utils
 from . import cursor
 
-class BulletCli:
+class Bullet:
     def __init__(
             self, 
             choices: list             = [], 
             bullet: str               = "●", 
-            bullet_color: str         = colors.foreground["cyan"],
+            bullet_color: str         = colors.foreground["white"],
             word_color: str           = colors.foreground["white"],
             word_on_switch: str       = colors.foreground["black"],
             background_color: str     = colors.background["black"],
