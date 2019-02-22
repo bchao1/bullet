@@ -15,6 +15,6 @@ setup(
             'os',
             'termios',
             'tty'
-      ]
+      ],
       packages=find_packages(),
       )
