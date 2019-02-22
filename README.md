@@ -1,4 +1,4 @@
-# `bullet` : Beautiful Python List Prompts Made Easy
+# `bullet` : Beautiful Python List Prompts Made Simple
 <p align=center>
 <img src="./assets/list.png" width="400"/>
 <br>
