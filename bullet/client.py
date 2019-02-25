@@ -104,3 +104,75 @@ class Bullet:
                 self.moveBullet()
             elif i == ARROW_DOWN_KEY:
                 self.moveBullet(up = False)
+
+class Input:
+    def __init__(
+            self, 
+            word_color = colors.foreground["white"],
+            word_on_input = colors.foreground["black"], 
+            word_on_cursor = colors.foreground["cyan"],
+            background_color = colors.background["black"], 
+            background_on_input = colors.background["white"],
+            background_on_cursor = colors.background["yellow"]
+        ):
+
+        self.word_color = word_color
+        self.word_on_input = word_on_input
+        self.word_on_cursor = word_on_cursor
+        self.background_color = background_color
+        self.background_on_input = background_on_input
+        self.background_on_cursor = background_on_cursor
+
+        self.buffer = []
+        self.pos = 0
+    
+    def moveCursorRight(self):
+        pass
+
+    def moveCursorLeft(self):
+        pass
+
+    def insertChar(self, c):
+        pass
+
+    def deleteChar(self):
+        pass
+
+    def getInput(self):
+        ret = ''.join(self.buffer).strip()
+        self.buffer = []
+        return ret
+    
+    def launch(self, prompt = ""):
+        #cursor.hide_cursor()
+        utils.forceWrite(prompt)
+        while True:
+            c = utils.getchar()
+            i = c if c == UNDEFINED_KEY else ord(c)
+
+            if i == NEWLINE_KEY:
+                #utils.forceWrite('\n')
+                cursor.show_cursor()
+                return self.getInput()
+            elif i == LINE_BEGIN_KEY or \
+                 i == HOME_KEY       or \
+                 i == LINE_END_KEY   or \
+                 i == END_KEY        or \
+                 i == ARROW_UP_KEY   or \
+                 i == ARROW_DOWN_KEY or \
+                 i == PG_UP_KEY      or \
+                 i == PG_DOWN_KEY    or \
+                 i == TAB_KEY        or \
+                 i == UNDEFINED_KEY:
+                return
+            elif i == BACK_SPACE_KEY:
+                if self.moveCursor(self.pos - 1):
+                    self.deleteChar()
+            elif i == DELETE_KEY:
+                self.deleteChar()
+            elif i == ARROW_RIGHT_KEY:
+                self.moveCursorRight()
+            elif i == ARROW_LEFT_KEY:
+                self.moveCursorLeft()
+            else:
+                self.insertChar(c)

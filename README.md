@@ -50,6 +50,11 @@ cli = Bullet(choices = ["first item", "second item", "thrid item"])
 ```python
 cli = Bullet(bullet = "★")
 ```
+### Use Default Style Schemes
+```python
+from bullet import styles
+client = Bullet(**styles.Greece)
+```
 
 ### Customize Colors
 ```python
