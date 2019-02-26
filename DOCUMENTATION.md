@@ -23,7 +23,7 @@
 ## Using `bullet`<a name="topic_1"></a>
 ```python
 from bullet import Bullet, Check
-cli = Bullet()  # Create a Bullet or Check object
+cli = Bullet(prompt = "...")  # Create a Bullet or Check object
 result = cli.launch()  # Launch a prompt
 ```
 
@@ -82,10 +82,12 @@ client = Bullet(**styles.Greece)
 ```
 
 ## ⌨️ Using `Bullet` Object<a name="topic_7"></a>
+> Single-choice prompt
 - Move current position up and down using **arrow keys**. 
 - Returns the chosen item after pressing **enter**.
 
 ## ⌨️ Using `Check` Object<a name="topic_8"></a>
+> Multiple-choice prompt
 - Move current position up and down using **arrow keys**. 
 - Check an item by pressing **right arrow**. 
 - Un-check an item by pressing **left arrow**.

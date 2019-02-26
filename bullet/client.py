@@ -3,10 +3,80 @@ from .charDef import *
 from . import colors
 from . import utils
 from . import cursor
+import readline
+
+class myInput:
+    def __init__(self):
+        self.buffer = []
+        self.pos = 0
+
+    def moveCursor(self, pos):
+        if pos < 0 or pos > len(self.buffer):
+            return False
+        if self.pos <= pos:
+            while self.pos != pos:
+                utils.forceWrite(self.buffer[self.pos])
+                self.pos += 1
+        else:
+            while self.pos != pos:
+                utils.forceWrite("\b")
+                self.pos -= 1
+        return True
+
+    def insertChar(self, c):
+        self.buffer.insert(self.pos, c)
+        utils.forceWrite(''.join(self.buffer[self.pos:]))
+        utils.forceWrite("\b" * (len(self.buffer) - self.pos - 1))
+        self.pos += 1
+
+    def getInput(self):
+        ret = ''.join(self.buffer).strip()
+        self.buffer = []
+        self.pos = 0
+        return ret
+
+    def deleteChar(self):
+        if self.pos == len(self.buffer):
+            return
+        self.buffer.pop(self.pos)
+        utils.forceWrite(''.join(self.buffer[self.pos:]) + ' ')
+        utils.forceWrite("\b" * (len(self.buffer) - self.pos + 1))
+
+    def input(self):
+        while True:
+            c = utils.getchar()
+            i = c if c == UNDEFINED_KEY else ord(c)
+
+            if i == NEWLINE_KEY:
+                utils.forceWrite('\n')
+                return self.getInput()
+            elif i == LINE_BEGIN_KEY or \
+                 i == HOME_KEY       or \
+                 i == LINE_END_KEY   or \
+                 i == END_KEY        or \
+                 i == ARROW_UP_KEY   or \
+                 i == ARROW_DOWN_KEY or \
+                 i == PG_UP_KEY      or \
+                 i == PG_DOWN_KEY    or \
+                 i == TAB_KEY        or \
+                 i == UNDEFINED_KEY:
+                return
+            elif i == BACK_SPACE_KEY:
+                if self.moveCursor(self.pos - 1):
+                    self.deleteChar()
+            elif i == DELETE_KEY:
+                self.deleteChar()
+            elif i == ARROW_RIGHT_KEY:
+                self.moveCursor(self.pos + 1)
+            elif i == ARROW_LEFT_KEY:
+                self.moveCursor(self.pos - 1)
+            else:
+                self.insertChar(c)
 
 class Bullet:
     def __init__(
             self, 
+            prompt: str               = "",
             choices: list             = [], 
             bullet: str               = "●", 
             bullet_color: str         = colors.foreground["white"],
@@ -28,6 +98,7 @@ class Bullet:
         if margin < 0:
             raise ValueError("Margin must be > 0!")
 
+        self.prompt = prompt
         self.choices = choices
         self.pos = 0
 
@@ -86,9 +157,9 @@ class Bullet:
                 utils.moveCursorDown(1)
                 self.printBullet(self.pos)
 
-    def launch(self, prompt = ""):
-        if prompt:
-            utils.forceWrite(' ' * self.indent + prompt + '\n')
+    def launch(self):
+        if self.prompt:
+            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
             utils.forceWrite('\n' * self.shift)
         self.renderBullets()
         utils.moveCursorUp(len(self.choices))
@@ -108,6 +179,7 @@ class Bullet:
 class Check:
     def __init__(
             self, 
+            prompt: str               = "",
             choices: list             = [], 
             check: str                = "√", 
             check_color: str          = colors.foreground["white"],
@@ -130,6 +202,7 @@ class Check:
         if margin < 0:
             raise ValueError("Margin must be > 0!")
 
+        self.prompt = prompt
         self.choices = choices
         self.checked = [False] * len(self.choices)
         self.pos = 0
@@ -199,9 +272,9 @@ class Check:
                 utils.moveCursorDown(1)
                 self.printRow(self.pos)
 
-    def launch(self, prompt = ""):
-        if prompt:
-            utils.forceWrite(' ' * self.indent + prompt + '\n')
+    def launch(self):
+        if self.prompt:
+            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
             utils.forceWrite('\n' * self.shift)
         self.renderRows()
         utils.moveCursorUp(len(self.choices))
@@ -222,96 +295,28 @@ class Check:
             elif i == ARROW_LEFT_KEY:
                 self.uncheckRow()
 
-''' Unfinished Stuff...
-class Input:
-    def __init__(
-            self, 
-            word_color = colors.foreground["white"],
-            word_on_input = colors.foreground["cyan"], 
-            word_on_cursor = colors.foreground["cyan"],
-            background_color = colors.background["black"], 
-            background_on_input = colors.background["yellow"],
-            background_on_cursor = colors.background["yellow"]
-        ):
+class YesNo:
+    def __init__(self, prompt, indent = 0):
+        self.indent = indent
+        if not prompt:
+            raise ValueError("Prompt can not be empty!")
+        self.prompt = prompt
 
-        self.word_color = word_color
-        self.word_on_input = word_on_input
-        self.word_on_cursor = word_on_cursor
-        self.background_color = background_color
-        self.background_on_input = background_on_input
-        self.background_on_cursor = background_on_cursor
-
-        self.buffer = []
-        self.pos = 0
-    
-    def moveCursorRight(self):
-        if self.pos + 1 > len(self.buffer):
+    def valid(self, ans):
+        if ans.lower() not in ['y', 'n']:
+            utils.moveCursorUp(1)
+            utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
+            utils.forceWrite(' ' * len(ans))
+            utils.forceWrite('\b' * len(ans))
             return False
-        utils.forceWrite(self.buffer[self.pos])
-        self.pos += 1
         return True
-
-    def moveCursorLeft(self):
-        if self.pos < 1:
-            return False
-        utils.forceWrite('\b')
-        self.pos -= 1
-        return True
-
-    def insertChar(self, c):
-        self.resetColors()
-        self.buffer.insert(self.pos, c)
-        utils.cprint(self.buffer[self.pos], self.word_on_input, self.background_on_input, end = '')
-        utils.forceWrite(''.join(self.buffer[self.pos + 1:]))
-        utils.forceWrite("\b" * (len(self.buffer) - self.pos - 1))
-        self.pos += 1
-
-    def deleteChar(self):
-        if self.pos == len(self.buffer):
-            return
-        self.buffer.pop(self.pos)
-        utils.forceWrite(''.join(self.buffer[self.pos:]) + ' ')
-        utils.forceWrite("\b" * (len(self.buffer) - self.pos + 1))
-
-    def getInput(self):
-        ret = ''.join(self.buffer).strip()
-        self.buffer = []
-        return ret
-    
-    def resetColors(self):
-        pass
-
-    def launch(self, prompt = ""):
-        #cursor.hide_cursor()
-        utils.forceWrite(prompt)
+        
+    def launch(self):
+        my_input = myInput()
+        utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
         while True:
-            c = utils.getchar()
-            i = c if c == UNDEFINED_KEY else ord(c)
-
-            if i == NEWLINE_KEY:
-                utils.forceWrite('\n')
-                #cursor.show_cursor()
-                return self.getInput()
-            elif i == LINE_BEGIN_KEY or \
-                 i == HOME_KEY       or \
-                 i == LINE_END_KEY   or \
-                 i == END_KEY        or \
-                 i == ARROW_UP_KEY   or \
-                 i == ARROW_DOWN_KEY or \
-                 i == PG_UP_KEY      or \
-                 i == PG_DOWN_KEY    or \
-                 i == TAB_KEY        or \
-                 i == UNDEFINED_KEY:
-                return
-            elif i == BACK_SPACE_KEY:
-                if self.moveCursor(self.pos - 1):
-                    self.deleteChar()
-            elif i == DELETE_KEY:
-                self.deleteChar()
-            elif i == ARROW_RIGHT_KEY:
-                self.moveCursorRight()
-            elif i == ARROW_LEFT_KEY:
-                self.moveCursorLeft()
+            ans = my_input.input()
+            if not self.valid(ans):
+                continue
             else:
-                self.insertChar(c)
-'''
+                return True if ans.lower() == 'y' else False

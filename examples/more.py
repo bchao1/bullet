@@ -3,9 +3,10 @@ from bullet import Check
 from bullet import styles
 
 client = Check(
+    prompt = "Choose from a list: ",
     **styles.Example,
     **styles.Exam
 )
 print('\n', end = '')
-result = client.launch("Choose from a list: ")
+result = client.launch()
 print(result)

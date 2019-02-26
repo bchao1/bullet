@@ -2,6 +2,7 @@ from bullet import Bullet
 from bullet import colors
 
 cli = Bullet(
+        prompt = "\nPlease choose a fruit: ",
         choices = ["apple", "banana", "orange", "watermelon", "strawberry"], 
         indent = 0,
         align = 5, 
@@ -16,5 +17,5 @@ cli = Bullet(
         pad_right = 5
     )
 
-result = cli.launch("\nPlease choose a fruit: ")
+result = cli.launch()
 print("You chose:", result)

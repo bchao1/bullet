@@ -13,10 +13,10 @@
 ***
 
 ```python
-from bullet import Bullet, Check # and etc...
+from bullet import Bullet, Check, YesNo # and etc...
 
-cli = Bullet(...) # Setup styles
-result = cli.launch(prompt) # Launch it on your terminal!
+cli = Bullet(prompt = "...") # Setup styles
+result = cli.launch() # Launch it on your terminal!
 ```
 
 <table>
