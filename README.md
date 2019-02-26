@@ -13,10 +13,10 @@
 ***
 
 ```python
-from bullet import Bullet
+from bullet import Bullet, Check # and etc...
 
-cli = Bullet(...)
-result = cli.launch(prompt)
+cli = Bullet(...) # Setup styles
+result = cli.launch(prompt) # Launch it on your terminal!
 ```
 
 <p align=center>
@@ -30,62 +30,5 @@ result = cli.launch(prompt)
 $ pip install bullet
 ```
 
-## Documentation
-
-> 👷 To fully customize your list prompt, you'll have to take total control of formatting and colors. Here's what you need to know.
-
-### Using `bullet`
-```python
-from bullet import Bullet
-cli = Bullet()  # Create a Bullet object
-result = cli.launch()  # Launch a list prompt
-```
-
-### Defining Choices
-```python
-cli = Bullet(choices = ["first item", "second item", "thrid item"])
-```
-
-### Customize Bullets
-```python
-cli = Bullet(bullet = "★")
-```
-### Use Default Style Schemes
-```python
-from bullet import styles
-client = Bullet(**styles.Greece)
-```
-
-### Customize Colors
-```python
-from bullet import colors
-```
-> 🎨 The following colors are supported in `bullets`. 
-```
-black, red, green, yellow, blue, magenta, cyan, white
-```
-> 🎨 Remember to specify `foreground` and `background`.
-```python
-black_foreground = colors.foreground["black"]
-white_background = colors.background["white"]
-```
-> 🎨 Define the following colors when initializing the `Bullet` object.
-- Use foreground colors:
-    - `bullet_color`
-    - `word_color`
-    - `word_on_switch`
-- Use background colors:
-    - `background_color`
-    - `background_on_switch`
-
-### Formatting
-> 📐 Define the following when initializaing the `Bullet` object.
-- `indent`: distance from left-boundary to start of prompt.
-- `pad_right`: extended background length.
-- `align`: distance between bullet and start of prompt.
-- `margin`: distance between list item and bullets.
-- `shift`: number of new lines between prompt and first item.
-
-<p align=center>
-<img src="./assets/formatting.png" width="600"/>
-</p>
+## Contributing
+🎉 Directly send PRs! I'd also love to see your color schemes, and they can possibly be added to the default style library!
