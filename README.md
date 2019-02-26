@@ -19,8 +19,7 @@ cli = Bullet(...) # Setup styles
 result = cli.launch(prompt) # Launch it on your terminal!
 ```
 
-<p align=center>
-<table>
+<table style="margin:0 auto">
     <tr>
         <th>./examples/classic.py</th>
         <th>./exmaples/colorful.py</th>
@@ -52,8 +51,6 @@ result = cli.launch(prompt) # Launch it on your terminal!
         <td><img src="./assets/gifs/christmas.gif" width="200"/></td>
     </tr>
 </table>
-
-</p>
 
 ## Setting up `bullet`
 > From PyPI
