@@ -1,6 +1,6 @@
 import sys
 
-# Keyboard mapping macros 
+# Keyboard mapping macros
 
 LINE_BEGIN_KEY  = 1
 LINE_END_KEY    = 5
@@ -30,3 +30,4 @@ MOD_KEY_DUMMY   = 126
 UNDEFINED_KEY   = sys.maxsize
 BEEP_CHAR       = 7
 BACK_SPACE_CHAR = 8
+END_OF_TEXT     = 3

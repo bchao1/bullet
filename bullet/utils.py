@@ -28,10 +28,10 @@ def getchar():
        ord(c) == TAB_KEY        or \
        ord(c) == NEWLINE_KEY:
        return c
-    
+
     elif ord(c) == BACK_SPACE_KEY:
         return c
-    
+
     elif ord(c) == ESC_KEY:
         combo = mygetc()
         if ord(combo) == MOD_KEY_INT:
@@ -48,6 +48,9 @@ def getchar():
         else:
             mybeep()
             return getchar()
+
+    elif ord(c) == END_OF_TEXT:
+        raise KeyboardInterrupt
 
     else:
         if c in string.printable:
@@ -71,9 +74,9 @@ def moveCursorLeft(n):
 
 def moveCursorRight(n):
     ''' Move cursor right n columns. '''
-    
+
     forceWrite("\033[{}C".format(n))
-    
+
 def moveCursorUp(n):
     ''' Move cursor up n rows. '''
 
@@ -92,9 +95,9 @@ def clearLine():
 
     forceWrite(" " * COLUMNS)
     moveCursorHead()
-    
+
 def clearConsole(n):
-    ''' Clear n console rows (bottom up). ''' 
+    ''' Clear n console rows (bottom up). '''
 
     for _ in range(n):
         clearLine()

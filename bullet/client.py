@@ -91,10 +91,10 @@ class myInput:
 
 class Bullet:
     def __init__(
-            self, 
+            self,
             prompt: str               = "",
-            choices: list             = [], 
-            bullet: str               = "●", 
+            choices: list             = [],
+            bullet: str               = "●",
             bullet_color: str         = colors.foreground["white"],
             word_color: str           = colors.foreground["white"],
             word_on_switch: str       = colors.foreground["black"],
@@ -133,12 +133,12 @@ class Bullet:
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
-    
+
     def renderBullets(self):
         for i in range(len(self.choices)):
             self.printBullet(i)
             utils.forceWrite('\n')
-            
+
     def printBullet(self, idx):
         utils.forceWrite(' ' * (self.indent + self.align))
         back_color = self.background_on_switch if idx == self.pos else self.background_color
@@ -194,12 +194,12 @@ class Bullet:
 
 class Check:
     def __init__(
-            self, 
+            self,
             prompt: str               = "",
-            choices: list             = [], 
-            check: str                = "√", 
+            choices: list             = [],
+            check: str                = "√",
             check_color: str          = colors.foreground["white"],
-            check_on_switch: str      = colors.foreground["black"], 
+            check_on_switch: str      = colors.foreground["black"],
             word_color: str           = colors.foreground["white"],
             word_on_switch: str       = colors.foreground["black"],
             background_color: str     = colors.background["black"],
@@ -239,12 +239,12 @@ class Check:
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
-    
+
     def renderRows(self):
         for i in range(len(self.choices)):
             self.printRow(i)
             utils.forceWrite('\n')
-            
+
     def printRow(self, idx):
         utils.forceWrite(' ' * (self.indent + self.align))
         back_color = self.background_on_switch if idx == self.pos else self.background_color
@@ -261,7 +261,7 @@ class Check:
     def checkRow(self):
         self.checked[self.pos] = True
         self.printRow(self.pos)
-    
+
     def uncheckRow(self):
         self.checked[self.pos] = False
         self.printRow(self.pos)
@@ -319,6 +319,9 @@ class YesNo:
         self.prompt = prompt
 
     def valid(self, ans):
+        if ans is None:
+            return False
+
         if ans.lower() not in ['y', 'n']:
             utils.moveCursorUp(1)
             utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
@@ -326,7 +329,7 @@ class YesNo:
             utils.forceWrite('\b' * len(ans))
             return False
         return True
-        
+
     def launch(self):
         my_input = myInput()
         utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
@@ -343,7 +346,7 @@ class Input:
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
-        
+
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
         return myInput().input()
@@ -355,7 +358,7 @@ class Password:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
         self.hidden = hidden
-        
+
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
         return myInput(password = True, hidden = self.hidden).input()
@@ -377,7 +380,7 @@ class Numbers:
             utils.forceWrite(' ' * len(ans))
             utils.forceWrite('\b' * len(ans))
             return False
-        
+
     def launch(self):
         my_input = myInput()
         utils.forceWrite(' ' * self.indent + self.prompt)
@@ -395,7 +398,7 @@ class Prompt:
         self.components = components
         self.spacing = spacing
         self.result = []
-    
+
     def launch(self):
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
