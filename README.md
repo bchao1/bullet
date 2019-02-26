@@ -12,13 +12,15 @@
 > 🎨 Customize prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, styling, and etc.
 ***
 
+## Usage
 ```python
 from bullet import Bullet, Check, YesNo # and etc...
 
 cli = Bullet(prompt = "...") # Setup styles
 result = cli.launch() # Launch it on your terminal!
 ```
-
+## Bullet-lists and checkboxes
+> 🎨 Robust support for user-defined styles.
 <table>
     <tr>
         <th>./examples/classic.py</th>
@@ -51,6 +53,13 @@ result = cli.launch() # Launch it on your terminal!
         <td><img src="./assets/gifs/christmas.gif" width="200"/></td>
     </tr>
 </table>
+
+## Other input prompts
+> ⛔ Passwords
+<img src="./assets/gifs/password.gif" width="600"/>
+
+> 👍 Yes/No Questions
+<img src="./assets/gifs/yesno.gif" width="600"/>
 
 ## Setting up `bullet`
 > From PyPI
