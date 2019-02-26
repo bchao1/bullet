@@ -72,8 +72,9 @@ $ git clone https://github.com/Mckinsey666/bullet.git
 $ pip install .
 ```
 ## Documentation
-> 📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
-Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`.
+📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
+
+> Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`.
 
 ## Contributing
 🎉 Directly send PRs! I'd also love to see your color schemes, and they can possibly be added to the default style library!
