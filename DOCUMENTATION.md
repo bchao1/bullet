@@ -9,10 +9,10 @@
 
 ## Table of Contents
 
-- Overview
+- General
     - [Using `bullet` Objects](#topic_1)
     - [Defining Choices](#topic_2)
-    - [Customize Bullets and Checks](#topic_3)
+    - [Customize Bullets, Checks, and Hidden Characters](#topic_3)
     - [Customize Colors](#topic_4)
     - [Formatting](#topic_5)
     - [Use Default Style Schemes](#topic_6)
@@ -20,7 +20,8 @@
 - [Using `Check` Object](#topic_8)
 - [Using `Input` Object](#topic_9)
 - [Using `YesNo` Object](#topic_10)
-- [Using `Prompt` Object](#topic_11)
+- [Using `Password` Object](#topic_11)
+- [Using `Prompt` Object](#topic_12)
 
 
 ## Using `bullet` Objects <a name="topic_1"></a>
@@ -36,10 +37,11 @@ result = cli.launch()  # Launch a prompt
 cli = Bullet(choices = ["first item", "second item", "thrid item"])
 ```
 
-## Customize Bullets and Checks<a name="topic_3"></a>
+## Customize Bullets, Checks, and Hidden Characters<a name="topic_3"></a>
 ```python
 cli = Bullet(bullet = "★")
 cli = Check(check = "√")
+cli = Password(hidden = "*")
 ```
 
 ## Customize Colors<a name="topic_4"></a>
@@ -87,11 +89,13 @@ client = Bullet(**styles.Greece)
 
 ## ⌨️ Using `Bullet` Object<a name="topic_7"></a>
 > Single-choice prompt
+- Define `bullet` when initializing `Bullet` object.
 - Move current position up and down using **arrow keys**. 
 - Returns the chosen item after pressing **enter**.
 
 ## ⌨️ Using `Check` Object<a name="topic_8"></a>
 > Multiple-choice prompt
+- Define `check` when initializing `Check` object.
 - Move current position up and down using **arrow keys**. 
 - Check an item by pressing **right arrow**. 
 - Un-check an item by pressing **left arrow**.
@@ -104,8 +108,13 @@ client = Bullet(**styles.Greece)
 > Guarded Yes/No question.
 - Only enter `y/Y` or `n/N`. Other invalid inputs will be guarded, and the user will be asked to re-enter.
 
-## ⌨️ Using `Prompt` Object<a name="topic_11"></a>
-> Wrapping it all up
+## ⌨️ Using `Password` Object<a name="topic_11"></a>
+> Enter passwords. 
+- Define `hidden` when initializing `Password` object. This would be the character shown on the terminal when passwords are entered.
+- In convention, space characters `' '` are guarded and should not be in a password.
+
+## ⌨️ Using `Prompt` Object<a name="topic_12"></a>
+> Wrapping it all up.
 - Stack `bullet` UI components into one prompt.
 - Returns a list of tuples `(prompt, result)`.
 - `spacing`: number of lines between adjacent UI components.

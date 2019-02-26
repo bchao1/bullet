@@ -7,16 +7,21 @@ import readline
 
 # Reusable private utility class
 class myInput:
-    def __init__(self):
+    def __init__(self, password = False, hidden = '*'):
         self.buffer = []
         self.pos = 0
+        self.password = password
+        self.hidden = hidden
 
     def moveCursor(self, pos):
         if pos < 0 or pos > len(self.buffer):
             return False
         if self.pos <= pos:
             while self.pos != pos:
-                utils.forceWrite(self.buffer[self.pos])
+                if self.password:
+                    utils.forceWrite(self.hidden)
+                else:
+                    utils.forceWrite(self.buffer[self.pos])
                 self.pos += 1
         else:
             while self.pos != pos:
@@ -26,7 +31,10 @@ class myInput:
 
     def insertChar(self, c):
         self.buffer.insert(self.pos, c)
-        utils.forceWrite(''.join(self.buffer[self.pos:]))
+        if self.password:
+            utils.forceWrite(self.hidden * (len(self.buffer) - self.pos))
+        else:
+            utils.forceWrite(''.join(self.buffer[self.pos:]))
         utils.forceWrite("\b" * (len(self.buffer) - self.pos - 1))
         self.pos += 1
 
@@ -40,7 +48,10 @@ class myInput:
         if self.pos == len(self.buffer):
             return
         self.buffer.pop(self.pos)
-        utils.forceWrite(''.join(self.buffer[self.pos:]) + ' ')
+        if self.hidden:
+            utils.forceWrite(self.hidden * (len(self.buffer) - self.pos) + ' ')
+        else:
+            utils.forceWrite(''.join(self.buffer[self.pos:]) + ' ')
         utils.forceWrite("\b" * (len(self.buffer) - self.pos + 1))
 
     def input(self):
@@ -72,7 +83,11 @@ class myInput:
             elif i == ARROW_LEFT_KEY:
                 self.moveCursor(self.pos - 1)
             else:
-                self.insertChar(c)
+                if self.password:
+                    if c != ' ':
+                        self.insertChar(c)
+                else:
+                    self.insertChar(c)
 
 class Bullet:
     def __init__(
@@ -332,6 +347,18 @@ class Input:
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
         return myInput().input()
+
+class Password:
+    def __init__(self, prompt, indent = 0, hidden = '*'):
+        self.indent = indent
+        if not prompt:
+            raise ValueError("Prompt can not be empty!")
+        self.prompt = prompt
+        self.hidden = hidden
+        
+    def launch(self):
+        utils.forceWrite(' ' * self.indent + self.prompt)
+        return myInput(password = True, hidden = self.hidden).input()
 
 class Prompt:
     def __init__(self, components, spacing):
