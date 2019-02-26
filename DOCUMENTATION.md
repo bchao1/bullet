@@ -18,11 +18,14 @@
     - [Use Default Style Schemes](#topic_6)
 - [Using `Bullet` Object](#topic_7)
 - [Using `Check` Object](#topic_8)
+- [Using `Input` Object](#topic_9)
+- [Using `YesNo` Object](#topic_10)
 
 
 ## Using `bullet`<a name="topic_1"></a>
+> Always create a CLI UI object with a prompt specified.
 ```python
-from bullet import Bullet, Check
+from bullet import Bullet, Check, YesNo, Input # and etc...
 cli = Bullet(prompt = "...")  # Create a Bullet or Check object
 result = cli.launch()  # Launch a prompt
 ```
@@ -63,7 +66,7 @@ white_background = colors.background["white"]
     - `background_on_switch`
 
 ## Formatting<a name="topic_5"></a>
-> 📐 Define the following when initializaing `Bullet` and `Check` objects.
+> 📐 Define the following UI components (not all is needed for some objects).
 - `indent`: distance from left-boundary to start of prompt.
 - `pad_right`: extended background length.
 - `align`: distance between bullet (or check) and start of prompt.
@@ -92,3 +95,10 @@ client = Bullet(**styles.Greece)
 - Check an item by pressing **right arrow**. 
 - Un-check an item by pressing **left arrow**.
 - Returns the a list of chosen items after pressing **enter**.
+
+## ⌨️ Using `Input` Object<a name="topic_9"></a>
+> Just vanilla user input.
+
+## ⌨️ Using `YesNo` Object<a name="topic_10"></a>
+> Guarded Yes/No question.
+- Only enter `y/Y` or `n/N`. Other invalid inputs will be guarded, and the user will be asked to re-enter.
