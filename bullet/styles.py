@@ -5,7 +5,7 @@ Example = {
     "margin" : 2,
     "pad_right" : 5,
     "align" : 5,
-    "shift" : 1
+    "shift" : 0
 }
 
 # Styles for Bullet Class
@@ -46,3 +46,13 @@ Lime = {
 }
 
 # Use other default styles!
+
+Exam = {
+    "check" : "√",
+    "check_color" : colors.foreground["red"],
+    "check_on_switch" : colors.foreground["red"],
+    "word_color" : colors.foreground["black"],
+    "word_on_switch" : colors.foreground["black"],
+    "background_color" : colors.background["white"],
+    "background_on_switch" : colors.background["yellow"]
+}

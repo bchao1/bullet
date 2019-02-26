@@ -1,10 +1,11 @@
 from bullet import Bullet
+from bullet import Check
 from bullet import styles
 
-client = Bullet(
+client = Check(
     **styles.Example,
-    **styles.Lime
+    **styles.Exam
 )
-
+print('\n', end = '')
 result = client.launch("Choose from a list: ")
 print(result)

@@ -20,9 +20,39 @@ result = cli.launch(prompt) # Launch it on your terminal!
 ```
 
 <p align=center>
-<img src="./assets/gifs/classic.gif" width="200"/>
-<img src="./assets/gifs/colorful.gif" width="200"/>
-<img src="./assets/gifs/star.gif" width="200"/>
+<table>
+    <tr>
+        <th>./examples/classic.py</th>
+        <th>./exmaples/colorful.py</th>
+        <th>./examples/star.py</th>
+    </tr>
+    <tr>
+        <td><img src="./assets/gifs/classic.gif" width="200"/></td>
+        <td><img src="./assets/gifs/colorful.gif" width="200"/></td>
+        <td><img src="./assets/gifs/star.gif" width="200"/></td>
+    </tr>
+    <tr>
+        <th>Vanilla checkbox</th>
+        <th>Checkbox + styles.Exam</th>
+        <th>Bullet + styles.Greece</th>
+    </tr>
+    <tr>
+        <td><img src="./assets/gifs/checkbox.gif" width="200"/></td>
+        <td><img src="./assets/gifs/exam.gif" width="200"/></td>
+        <td><img src="./assets/gifs/greece.gif" width="200"/></td>
+    </tr>
+    <tr>
+        <th>Bullet + Ocean</th>
+        <th>Bullet + Lime</th>
+        <th>Bullet + Christmas</th>
+    </tr>
+    <tr>
+        <td><img src="./assets/gifs/ocean.gif" width="200"/></td>
+        <td><img src="./assets/gifs/lime.gif" width="200"/></td>
+        <td><img src="./assets/gifs/christmas.gif" width="200"/></td>
+    </tr>
+</table>
+
 </p>
 
 ## Setting up `bullet`
