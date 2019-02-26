@@ -1,4 +1,4 @@
-# `bullet` : Beautiful Python List Prompts Made Simple
+# `bullet` : Beautiful Python Prompts Made Simple
 <p align=center>
 <img src="./assets/list.png" width="400"/>
 <br>
@@ -9,7 +9,7 @@
 </p>
 
 ***
-> 🎨 Customize bullet list prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, and etc.
+> 🎨 Customize prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, styling, and etc.
 ***
 
 ```python
