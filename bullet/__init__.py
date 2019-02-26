@@ -1,2 +1,2 @@
 from .client import Bullet
-from .client import Input
+from .client import Check

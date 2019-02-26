@@ -3,7 +3,7 @@ from bullet import styles
 
 client = Bullet(
     **styles.Example,
-    **styles.Christmas
+    **styles.Lime
 )
 
 result = client.launch("Choose from a list: ")

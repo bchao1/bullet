@@ -8,6 +8,7 @@ Example = {
     "shift" : 1
 }
 
+# Styles for Bullet Class
 Ocean = {
     "bullet" : "",
     "bullet_color" : colors.foreground["cyan"],
@@ -18,7 +19,7 @@ Ocean = {
 }
 
 Greece = {
-    "bullet" : "αβγ",
+    "bullet" : "α",
     "bullet_color" : colors.foreground["white"],
     "word_color" : colors.foreground["blue"],
     "word_on_switch" : colors.foreground["white"],
@@ -43,3 +44,5 @@ Lime = {
     "background_color" : colors.background["green"],
     "background_on_switch" : colors.background["yellow"]
 }
+
+# Use other default styles!
