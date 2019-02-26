@@ -110,3 +110,17 @@ client = Bullet(**styles.Greece)
 - Returns a list of tuples `(prompt, result)`.
 - `spacing`: number of lines between adjacent UI components.
 - See `./examples/prompt.py` to get a better understanding.
+
+```python
+cli = Prompt(
+    [
+        Bullet("Choose from a list: ", **styles.Example),
+        Check("Choose from a list: ", **styles.Example),
+        Input("Who are you? "),
+        YesNo("Are you a student? ")
+    ],
+    spacing = 2
+)
+
+result = cli.launch()
+```
