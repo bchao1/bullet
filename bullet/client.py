@@ -5,6 +5,7 @@ from . import utils
 from . import cursor
 import readline
 
+# Reusable private utility class
 class myInput:
     def __init__(self):
         self.buffer = []
@@ -329,5 +330,19 @@ class Input:
         self.prompt = prompt
         
     def launch(self):
-        utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
+        utils.forceWrite(' ' * self.indent + self.prompt)
         return myInput().input()
+
+class Prompt:
+    def __init__(self, components, spacing):
+        if not components:
+            raise ValueError("Prompt components cannot be empty!")
+        self.components = components
+        self.spacing = spacing
+        self.result = []
+    
+    def launch(self):
+        for ui in self.components:
+            self.result.append((ui.prompt, ui.launch()))
+            utils.forceWrite("\n" * self.spacing)
+        return self.result

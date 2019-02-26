@@ -10,7 +10,7 @@
 ## Table of Contents
 
 - Overview
-    - [Using `bullet`](#topic_1)
+    - [Using `bullet` Objects](#topic_1)
     - [Defining Choices](#topic_2)
     - [Customize Bullets and Checks](#topic_3)
     - [Customize Colors](#topic_4)
@@ -20,10 +20,11 @@
 - [Using `Check` Object](#topic_8)
 - [Using `Input` Object](#topic_9)
 - [Using `YesNo` Object](#topic_10)
+- [Using `Prompt` Object](#topic_11)
 
 
-## Using `bullet`<a name="topic_1"></a>
-> Always create a CLI UI object with a prompt specified.
+## Using `bullet` Objects <a name="topic_1"></a>
+> Always create an UI object with a prompt specified.
 ```python
 from bullet import Bullet, Check, YesNo, Input # and etc...
 cli = Bullet(prompt = "...")  # Create a Bullet or Check object
@@ -102,3 +103,10 @@ client = Bullet(**styles.Greece)
 ## ⌨️ Using `YesNo` Object<a name="topic_10"></a>
 > Guarded Yes/No question.
 - Only enter `y/Y` or `n/N`. Other invalid inputs will be guarded, and the user will be asked to re-enter.
+
+## ⌨️ Using `Prompt` Object<a name="topic_11"></a>
+> Wrapping it all up
+- Stack `bullet` UI components into one prompt.
+- Returns a list of tuples `(prompt, result)`.
+- `spacing`: number of lines between adjacent UI components.
+- See `./examples/prompt.py` to get a better understanding.
