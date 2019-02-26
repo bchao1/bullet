@@ -43,7 +43,7 @@ result = cli.launch()  # Launch a list prompt
 
 ### Defining Choices
 ```python
-cli = Bullet(choices = ["first item", "second item", "thrid item"])
+cli = Bullet(choices = ["first item", "second item", "third item"])
 ```
 
 ### Customize Bullets
