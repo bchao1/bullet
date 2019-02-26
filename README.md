@@ -19,7 +19,7 @@ cli = Bullet(...) # Setup styles
 result = cli.launch(prompt) # Launch it on your terminal!
 ```
 
-<table style="margin:0 auto">
+<table>
     <tr>
         <th>./examples/classic.py</th>
         <th>./exmaples/colorful.py</th>
