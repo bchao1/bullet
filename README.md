@@ -41,9 +41,9 @@ result = cli.launch(prompt) # Launch it on your terminal!
         <td><img src="./assets/gifs/greece.gif" width="200"/></td>
     </tr>
     <tr>
-        <th>Bullet + Ocean</th>
-        <th>Bullet + Lime</th>
-        <th>Bullet + Christmas</th>
+        <th>Bullet + styles.Ocean</th>
+        <th>Bullet + styles.Lime</th>
+        <th>Bullet + styles.Christmas</th>
     </tr>
     <tr>
         <td><img src="./assets/gifs/ocean.gif" width="200"/></td>
