@@ -22,7 +22,7 @@ result = cli.launch(prompt) # Launch it on your terminal!
 <table>
     <tr>
         <th>./examples/classic.py</th>
-        <th>./exmaples/colorful.py</th>
+        <th>./examples/colorful.py</th>
         <th>./examples/star.py</th>
     </tr>
     <tr>
