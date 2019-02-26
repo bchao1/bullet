@@ -320,3 +320,14 @@ class YesNo:
                 continue
             else:
                 return True if ans.lower() == 'y' else False
+
+class Input:
+    def __init__(self, prompt, indent = 0):
+        self.indent = indent
+        if not prompt:
+            raise ValueError("Prompt can not be empty!")
+        self.prompt = prompt
+        
+    def launch(self):
+        utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
+        return myInput().input()
