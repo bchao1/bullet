@@ -360,6 +360,34 @@ class Password:
         utils.forceWrite(' ' * self.indent + self.prompt)
         return myInput(password = True, hidden = self.hidden).input()
 
+class Numbers:
+    def __init__(self, prompt, indent = 0):
+        self.indent = indent
+        if not prompt:
+            raise ValueError("Prompt can not be empty!")
+        self.prompt = prompt
+
+    def valid(self, ans):
+        try:
+            float(ans)
+            return True
+        except:
+            utils.moveCursorUp(1)
+            utils.forceWrite(' ' * self.indent + self.prompt)
+            utils.forceWrite(' ' * len(ans))
+            utils.forceWrite('\b' * len(ans))
+            return False
+        
+    def launch(self):
+        my_input = myInput()
+        utils.forceWrite(' ' * self.indent + self.prompt)
+        while True:
+            ans = my_input.input()
+            if not self.valid(ans):
+                continue
+            else:
+                return float(ans)
+
 class Prompt:
     def __init__(self, components, spacing):
         if not components:

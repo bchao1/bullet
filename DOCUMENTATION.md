@@ -4,7 +4,7 @@
 <br>
 
 ***
-> 👷 To fully customize your list prompt, you'll have to take total control of formatting and colors. Here's what you need to know.
+> 👷 To fully customize your prompts, you'll have to take total control of formatting and colors. Here's what you need to know.
 ***
 
 ## Table of Contents
@@ -21,7 +21,8 @@
 - [Using `Input` Object](#topic_9)
 - [Using `YesNo` Object](#topic_10)
 - [Using `Password` Object](#topic_11)
-- [Using `Prompt` Object](#topic_12)
+- [Using `Numbers` Object](#topic_12)
+- [Using `Prompt` Object](#topic_13)
 
 
 ## Using `bullet` Objects <a name="topic_1"></a>
@@ -88,13 +89,13 @@ client = Bullet(**styles.Greece)
 ```
 
 ## ⌨️ Using `Bullet` Object<a name="topic_7"></a>
-> Single-choice prompt
+> Single-choice prompt.
 - Define `bullet` when initializing `Bullet` object.
 - Move current position up and down using **arrow keys**. 
 - Returns the chosen item after pressing **enter**.
 
 ## ⌨️ Using `Check` Object<a name="topic_8"></a>
-> Multiple-choice prompt
+> Multiple-choice prompt.
 - Define `check` when initializing `Check` object.
 - Move current position up and down using **arrow keys**. 
 - Check an item by pressing **right arrow**. 
@@ -113,7 +114,11 @@ client = Bullet(**styles.Greece)
 - Define `hidden` when initializing `Password` object. This would be the character shown on the terminal when passwords are entered.
 - In convention, space characters `' '` are guarded and should not be in a password.
 
-## ⌨️ Using `Prompt` Object<a name="topic_12"></a>
+## ⌨️ Using `Numbers` Object<a name="topic_12"></a>
+> Enter numeric values.
+- Non-numeric values will be guarded, and the user will be asked to re-enter.
+
+## ⌨️ Using `Prompt` Object<a name="topic_13"></a>
 > Wrapping it all up.
 - Stack `bullet` UI components into one prompt.
 - Returns a list of tuples `(prompt, result)`.
