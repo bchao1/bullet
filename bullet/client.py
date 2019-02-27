@@ -260,14 +260,6 @@ class Check:
         utils.cprint(' ' * (self.max_width - len(self.choices[idx])), on = back_color, end = '')
         utils.moveCursorHead()
 
-    def checkRow(self):
-        self.checked[self.pos] = True
-        self.printRow(self.pos)
-    
-    def uncheckRow(self):
-        self.checked[self.pos] = False
-        self.printRow(self.pos)
-
     def toggleRow(self):
         self.checked[self.pos] = not self.checked[self.pos]
         self.printRow(self.pos)
@@ -315,10 +307,6 @@ class Check:
                 self.movePos()
             elif i == ARROW_DOWN_KEY:
                 self.movePos(up = False)
-            elif i == ARROW_RIGHT_KEY:
-                self.checkRow()
-            elif i == ARROW_LEFT_KEY:
-                self.uncheckRow()
             elif i == SPACE_CHAR:
                 self.toggleRow()
 

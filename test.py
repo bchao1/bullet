@@ -1,5 +1,5 @@
-from bullet import Bullet
+from bullet import Check
 
-cli = Bullet(prompt="Choose from a list: ", choices=["item 1", "item 2", "item 3"])
+cli = Check(prompt="Choose from a list: ", choices=["item 1", "item 2", "item 3"])
 result = cli.launch()
-result = cli.launch()
+print(result)
