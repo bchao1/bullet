@@ -7,11 +7,17 @@ import readline
 
 # Reusable private utility class
 class myInput:
-    def __init__(self, password = False, hidden = '*'):
+    def __init__(self, 
+        word_color = colors.foreground["default"], 
+        password = False, 
+        hidden = '*'
+    ):
+
         self.buffer = []
         self.pos = 0
         self.password = password
         self.hidden = hidden
+        self.word_color = word_color
 
     def moveCursor(self, pos):
         if pos < 0 or pos > len(self.buffer):
@@ -19,9 +25,9 @@ class myInput:
         if self.pos <= pos:
             while self.pos != pos:
                 if self.password:
-                    utils.forceWrite(self.hidden)
+                    utils.cprint(self.hidden, color = self.word_color, end = '')
                 else:
-                    utils.forceWrite(self.buffer[self.pos])
+                    utils.cprint(self.buffer[self.pos], color = self.word_color, end = '')
                 self.pos += 1
         else:
             while self.pos != pos:
@@ -32,9 +38,9 @@ class myInput:
     def insertChar(self, c):
         self.buffer.insert(self.pos, c)
         if self.password:
-            utils.forceWrite(self.hidden * (len(self.buffer) - self.pos))
+            utils.cprint(self.hidden * (len(self.buffer) - self.pos), color = self.word_color, end = '')
         else:
-            utils.forceWrite(''.join(self.buffer[self.pos:]))
+            utils.cprint(''.join(self.buffer[self.pos:]), color = self.word_color, end = '')
         utils.forceWrite("\b" * (len(self.buffer) - self.pos - 1))
         self.pos += 1
 
@@ -311,11 +317,12 @@ class Check:
                 self.toggleRow()
 
 class YesNo:
-    def __init__(self, prompt, indent = 0):
+    def __init__(self, prompt, indent = 0, word_color = colors.foreground["default"]):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
+        self.word_color = word_color
 
     def valid(self, ans):
         if ans.lower() not in ['y', 'n']:
@@ -327,7 +334,7 @@ class YesNo:
         return True
         
     def launch(self):
-        my_input = myInput()
+        my_input = myInput(word_color = self.word_color)
         utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
         while True:
             ans = my_input.input()
@@ -337,35 +344,38 @@ class YesNo:
                 return True if ans.lower() == 'y' else False
 
 class Input:
-    def __init__(self, prompt, indent = 0):
+    def __init__(self, prompt, indent = 0, word_color = colors.foreground["default"]):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
+        self.word_color = word_color
         
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
-        return myInput().input()
+        return myInput(word_color = self.word_color).input()
 
 class Password:
-    def __init__(self, prompt, indent = 0, hidden = '*'):
+    def __init__(self, prompt, indent = 0, hidden = '*', word_color = colors.foreground["default"]):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
         self.hidden = hidden
+        self.word_color = word_color
         
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
-        return myInput(password = True, hidden = self.hidden).input()
+        return myInput(password = True, hidden = self.hidden, word_color = self.word_color).input()
 
 class Numbers:
-    def __init__(self, prompt, indent = 0):
+    def __init__(self, prompt, indent = 0, word_color = colors.foreground["default"]):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
-
+        self.word_color = word_color
+    
     def valid(self, ans):
         try:
             float(ans)
@@ -378,7 +388,7 @@ class Numbers:
             return False
         
     def launch(self):
-        my_input = myInput()
+        my_input = myInput(word_color = self.word_color)
         utils.forceWrite(' ' * self.indent + self.prompt)
         while True:
             ans = my_input.input()
