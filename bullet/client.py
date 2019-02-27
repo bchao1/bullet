@@ -39,7 +39,7 @@ class myInput:
         self.pos += 1
 
     def getInput(self):
-        ret = ''.join(self.buffer).strip()
+        ret = ''.join(self.buffer)
         self.buffer = []
         self.pos = 0
         return ret
@@ -395,6 +395,10 @@ class Prompt:
         self.spacing = spacing
         self.result = []
     
+    def summarize(self):
+        for prompt, answer in self. result:
+            print(prompt, answer)
+        
     def launch(self):
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
