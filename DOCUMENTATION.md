@@ -59,13 +59,19 @@ default, black, red, green, yellow, blue, magenta, cyan, white
 black_foreground = colors.foreground["black"]
 white_background = colors.background["white"]
 ```
-> 🎨 Define the following colors when initializing `Bullet` and `Check` objects.
+> 🎨 You can wrap a color with the `bright` function
+```python
+bright_cyan = colors.bright(colors.foreground["cyan"])
+```
+
+> 🎨 Define the following colors when initializing the UI components.
 - Use foreground colors:
     - `bullet_color`
     - `check_color`
     - `check_on_switch`
     - `word_color`
     - `word_on_switch`
+    - `separator_color`
 - Use background colors:
     - `background_color`
     - `background_on_switch`
@@ -123,6 +129,7 @@ client = Bullet(**styles.Greece)
 - Stack `bullet` UI components into one prompt.
 - Returns a list of tuples `(prompt, result)`.
 - `spacing`: number of lines between adjacent UI components.
+- Or, if `separator` is defined, each UI will be separated by a sequence of `separator` characters.
 - See `./examples/prompt.py` to get a better understanding.
 
 ```python
