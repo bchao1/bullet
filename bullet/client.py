@@ -266,6 +266,10 @@ class Check:
         self.checked[self.pos] = False
         self.printRow(self.pos)
 
+    def toggleRow(self):
+        self.checked[self.pos] = not self.checked[self.pos]
+        self.printRow(self.pos)
+
     def movePos(self, up = True):
         if up:
             if self.pos - 1 < 0:
@@ -310,6 +314,8 @@ class Check:
                 self.checkRow()
             elif i == ARROW_LEFT_KEY:
                 self.uncheckRow()
+            elif i == SPACE_CHAR:
+                self.toggleRow()
 
 class YesNo:
     def __init__(self, prompt, indent = 0):
