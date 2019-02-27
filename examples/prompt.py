@@ -13,4 +13,4 @@ cli = Prompt(
 )
 
 result = cli.launch()
-print(result)
+cli.summarize()
