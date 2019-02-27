@@ -49,10 +49,11 @@ cli = Password(hidden = "*")
 ```python
 from bullet import colors
 ```
-> 🎨 The following colors are supported in `bullets`. 
+> 🎨 The following colors (both background and foreground) are supported in `bullets`. Note that `default` is the color of your default terminal.
 ```
-black, red, green, yellow, blue, magenta, cyan, white
+default, black, red, green, yellow, blue, magenta, cyan, white
 ```
+
 > 🎨 Remember to specify `foreground` and `background`.
 ```python
 black_foreground = colors.foreground["black"]
@@ -98,8 +99,7 @@ client = Bullet(**styles.Greece)
 > Multiple-choice prompt.
 - Define `check` when initializing `Check` object.
 - Move current position up and down using **arrow keys**. 
-- Check an item by pressing **right arrow**. 
-- Un-check an item by pressing **left arrow**.
+- Check/Un-check an item by pressing **space**.
 - Returns the a list of chosen items after pressing **enter**.
 
 ## ⌨️ Using `Input` Object<a name="topic_9"></a>
