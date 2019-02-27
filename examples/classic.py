@@ -9,11 +9,6 @@ cli = Bullet(
         margin = 2,
         shift = 0,
         bullet = "",
-        bullet_color=colors.foreground["white"],
-        word_color=colors.foreground["white"],
-        word_on_switch=colors.foreground["black"],
-        background_color=colors.background["black"],
-        background_on_switch=colors.background["white"],
         pad_right = 5
     )
 
