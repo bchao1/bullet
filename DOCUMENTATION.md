@@ -35,7 +35,7 @@ result = cli.launch()  # Launch a prompt
 
 ## Defining Choices<a name="topic_2"></a>
 ```python
-cli = Bullet(choices = ["first item", "second item", "thrid item"])
+cli = Bullet(choices = ["first item", "second item", "third item"])
 ```
 
 ## Customize Bullets, Checks, and Hidden Characters<a name="topic_3"></a>
