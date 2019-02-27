@@ -242,10 +242,6 @@ class Check:
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
     
-    def valid(self):
-        """ Override this function to allow validating choices before they're returned. """
-        return True
-
     def renderRows(self):
         for i in range(len(self.choices)):
             self.printRow(i)
@@ -301,13 +297,12 @@ class Check:
             c = utils.getchar()
             i = c if c == UNDEFINED_KEY else ord(c)
             if i == NEWLINE_KEY:
-                if self.valid():
-                    utils.moveCursorDown(len(self.choices) - self.pos)
-                    cursor.show_cursor()
-                    ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
-                    self.pos = 0
-                    self.checked = [False] * len(self.choices)
-                    return ret
+                utils.moveCursorDown(len(self.choices) - self.pos)
+                cursor.show_cursor()
+                ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
+                self.pos = 0
+                self.checked = [False] * len(self.choices)
+                return ret
             elif i == ARROW_UP_KEY:
                 self.movePos()
             elif i == ARROW_DOWN_KEY:

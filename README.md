@@ -14,10 +14,20 @@
 
 ## Usage
 ```python
-from bullet import Bullet, Check, YesNo # and etc...
+from bullet import Bullet, YesNo, Numbers, Input, Prompt
 
-cli = Bullet(prompt = "...") # Setup styles
-result = cli.launch() # Launch it on your terminal!
+cli = Prompt(
+    [
+        YesNo("Are you a student? "),
+        Input("Who are you? "),
+        Numbers("How old are you? "),
+        Bullet("What is your favorite programming language? ",
+              choices = ["C++", "Python", "Javascript", "Not here!"]),
+    ],
+    spacing = 1
+)
+
+result = cli.launch()
 ```
 ## Bullet-lists and checkboxes
 > 🎨 Robust support for user-defined styles.

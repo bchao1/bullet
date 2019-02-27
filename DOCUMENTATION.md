@@ -35,7 +35,7 @@ result = cli.launch()  # Launch a prompt
 
 ## Defining Choices<a name="topic_2"></a>
 ```python
-cli = Bullet(choices = ["first item", "second item", "thrid item"])
+cli = Bullet(choices = ["first item", "second item", "third item"])
 ```
 
 ## Customize Bullets, Checks, and Hidden Characters<a name="topic_3"></a>
@@ -49,10 +49,11 @@ cli = Password(hidden = "*")
 ```python
 from bullet import colors
 ```
-> 🎨 The following colors are supported in `bullets`. 
+> 🎨 The following colors (both background and foreground) are supported in `bullets`. Note that `default` is the color of your default terminal.
 ```
-black, red, green, yellow, blue, magenta, cyan, white
+default, black, red, green, yellow, blue, magenta, cyan, white
 ```
+
 > 🎨 Remember to specify `foreground` and `background`.
 ```python
 black_foreground = colors.foreground["black"]
@@ -98,8 +99,7 @@ client = Bullet(**styles.Greece)
 > Multiple-choice prompt.
 - Define `check` when initializing `Check` object.
 - Move current position up and down using **arrow keys**. 
-- Check an item by pressing **right arrow**. 
-- Un-check an item by pressing **left arrow**.
+- Check/Un-check an item by pressing **space**.
 - Returns the a list of chosen items after pressing **enter**.
 
 ## ⌨️ Using `Input` Object<a name="topic_9"></a>
@@ -128,12 +128,13 @@ client = Bullet(**styles.Greece)
 ```python
 cli = Prompt(
     [
-        Bullet("Choose from a list: ", **styles.Example),
-        Check("Choose from a list: ", **styles.Example),
+        YesNo("Are you a student? "),
         Input("Who are you? "),
-        YesNo("Are you a student? ")
+        Numbers("How old are you? "),
+        Bullet("What is your favorite programming language? ",
+              choices = ["C++", "Python", "Javascript", "Not here!"]),
     ],
-    spacing = 2
+    spacing = 1
 )
 
 result = cli.launch()
