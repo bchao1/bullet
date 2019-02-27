@@ -186,7 +186,9 @@ class Bullet:
             if i == NEWLINE_KEY:
                 utils.moveCursorDown(len(self.choices) - self.pos)
                 cursor.show_cursor()
-                return self.choices[self.pos]
+                ret = self.buffer[self.pos]
+                self.pos = 0
+                return ret
             elif i == ARROW_UP_KEY:
                 self.moveBullet()
             elif i == ARROW_DOWN_KEY:
@@ -301,7 +303,10 @@ class Check:
             if i == NEWLINE_KEY:
                 utils.moveCursorDown(len(self.choices) - self.pos)
                 cursor.show_cursor()
-                return [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
+                ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
+                self.pos = 0
+                self.checked = [False] * len(self.choices)
+                return ret
             elif i == ARROW_UP_KEY:
                 self.movePos()
             elif i == ARROW_DOWN_KEY:
