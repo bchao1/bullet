@@ -16,7 +16,7 @@
 ```python
 from bullet import Bullet, Check, YesNo # and etc...
 
-cli = Bullet(prompt = "...") # Setup styles
+cli = Bullet(prompt = "...") # Setup your prompt component
 result = cli.launch() # Launch it on your terminal!
 ```
 ## Bullet-lists and checkboxes
