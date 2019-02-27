@@ -95,11 +95,11 @@ class Bullet:
             prompt: str               = "",
             choices: list             = [], 
             bullet: str               = "●", 
-            bullet_color: str         = colors.foreground["white"],
-            word_color: str           = colors.foreground["white"],
-            word_on_switch: str       = colors.foreground["black"],
-            background_color: str     = colors.background["black"],
-            background_on_switch: str = colors.background["white"],
+            bullet_color: str         = colors.foreground["default"],
+            word_color: str           = colors.foreground["default"],
+            word_on_switch: str       = colors.REVERSE,
+            background_color: str     = colors.background["default"],
+            background_on_switch: str = colors.REVERSE,
             pad_right                 = 0,
             indent: int               = 0,
             align                     = 0,
@@ -186,7 +186,9 @@ class Bullet:
             if i == NEWLINE_KEY:
                 utils.moveCursorDown(len(self.choices) - self.pos)
                 cursor.show_cursor()
-                return self.choices[self.pos]
+                ret = self.choices[self.pos]
+                self.pos = 0
+                return ret
             elif i == ARROW_UP_KEY:
                 self.moveBullet()
             elif i == ARROW_DOWN_KEY:
@@ -198,12 +200,12 @@ class Check:
             prompt: str               = "",
             choices: list             = [], 
             check: str                = "√", 
-            check_color: str          = colors.foreground["white"],
-            check_on_switch: str      = colors.foreground["black"], 
-            word_color: str           = colors.foreground["white"],
-            word_on_switch: str       = colors.foreground["black"],
-            background_color: str     = colors.background["black"],
-            background_on_switch: str = colors.background["white"],
+            check_color: str          = colors.foreground["default"],
+            check_on_switch: str      = colors.REVERSE,
+            word_color: str           = colors.foreground["default"],
+            word_on_switch: str       = colors.REVERSE,
+            background_color: str     = colors.background["default"],
+            background_on_switch: str = colors.REVERSE,
             pad_right                 = 0,
             indent: int               = 0,
             align                     = 0,
@@ -258,12 +260,8 @@ class Check:
         utils.cprint(' ' * (self.max_width - len(self.choices[idx])), on = back_color, end = '')
         utils.moveCursorHead()
 
-    def checkRow(self):
-        self.checked[self.pos] = True
-        self.printRow(self.pos)
-    
-    def uncheckRow(self):
-        self.checked[self.pos] = False
+    def toggleRow(self):
+        self.checked[self.pos] = not self.checked[self.pos]
         self.printRow(self.pos)
 
     def movePos(self, up = True):
@@ -301,15 +299,16 @@ class Check:
             if i == NEWLINE_KEY:
                 utils.moveCursorDown(len(self.choices) - self.pos)
                 cursor.show_cursor()
-                return [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
+                ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
+                self.pos = 0
+                self.checked = [False] * len(self.choices)
+                return ret
             elif i == ARROW_UP_KEY:
                 self.movePos()
             elif i == ARROW_DOWN_KEY:
                 self.movePos(up = False)
-            elif i == ARROW_RIGHT_KEY:
-                self.checkRow()
-            elif i == ARROW_LEFT_KEY:
-                self.uncheckRow()
+            elif i == SPACE_CHAR:
+                self.toggleRow()
 
 class YesNo:
     def __init__(self, prompt, indent = 0):
