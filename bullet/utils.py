@@ -6,12 +6,10 @@ from .charDef import *
 from . import colors
 
 _, n = os.popen('stty size', 'r').read().split()
-COLUMNS = int(n)
-
-def mybeep():
-    print(chr(BEEP_CHAR), end = '')
+COLUMNS = int(n)  ## Size of console
 
 def mygetc():
+    ''' Get raw characters from input. '''
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
@@ -22,6 +20,7 @@ def mygetc():
     return ch
 
 def getchar():
+    ''' Character input parser. '''
     c = mygetc()
     if ord(c) == LINE_BEGIN_KEY or \
        ord(c) == LINE_END_KEY   or \
@@ -46,7 +45,6 @@ def getchar():
             else:
                 return UNDEFINED_KEY
         else:
-            mybeep()
             return getchar()
 
     else:
@@ -59,53 +57,55 @@ def getchar():
 
 # Basic command line functions
 
-def puts(s, indent = 4):
-    ''' Print string with indent. '''
-
-    forceWrite(' ' * indent + s + '\n')
-
 def moveCursorLeft(n):
     ''' Move cursor left n columns. '''
-
     forceWrite("\033[{}D".format(n))
 
 def moveCursorRight(n):
     ''' Move cursor right n columns. '''
-    
     forceWrite("\033[{}C".format(n))
     
 def moveCursorUp(n):
     ''' Move cursor up n rows. '''
-
     forceWrite("\033[{}A".format(n))
 
 def moveCursorDown(n):
     ''' Move cursor down n rows. '''
-
     forceWrite("\033[{}B".format(n))
 
 def moveCursorHead():
+    ''' Move cursor to the start of line. '''
     forceWrite("\r")
 
 def clearLine():
     ''' Clear content of one line on the console. '''
-
     forceWrite(" " * COLUMNS)
     moveCursorHead()
     
 def clearConsole(n):
     ''' Clear n console rows (bottom up). ''' 
-
     for _ in range(n):
         clearLine()
         moveCursorUp(1)
 
 def forceWrite(s, end = ''):
+    ''' Dump everthing in the buffer to the console. '''
     sys.stdout.write(s + end)
     sys.stdout.flush()
 
-def cprint(s, color = colors.foreground["default"], on = colors.background["default"], end = '\n'):
+def cprint(
+        s: str, 
+        color: str = colors.foreground["default"], 
+        on: str = colors.background["default"], 
+        end: str = '\n'
+    ):
+    ''' Colored print function.
+    Args:
+        s: The string to be printed.
+        color: The color of the string.
+        on: The color of the background.
+        end: Last character appended. 
+    Returns:
+        None
+    '''
     forceWrite(on + color + s + colors.RESET, end = end)
-
-if __name__ == "__main__":
-    cprint("hello", colors.foreground["red"], colors.background["white"])

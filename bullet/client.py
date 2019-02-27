@@ -8,18 +8,24 @@ import readline
 # Reusable private utility class
 class myInput:
     def __init__(self, 
-        word_color = colors.foreground["default"], 
-        password = False, 
-        hidden = '*'
-    ):
-
-        self.buffer = []
-        self.pos = 0
+            word_color: str = colors.foreground["default"], 
+            password: bool = False, 
+            hidden: str = '*'
+        ):
+        ''' Constructor for myInput 
+        Args:
+            word_color: color of input characters.
+            password: Whether input is password.
+            hidden: Character to be outputted for password input.
+        '''
+        self.buffer = [] # Buffer to store entered characters
+        self.pos = 0  # Current cursor position
         self.password = password
         self.hidden = hidden
         self.word_color = word_color
 
     def moveCursor(self, pos):
+        ''' Move cursort to pos in buffer. '''
         if pos < 0 or pos > len(self.buffer):
             return False
         if self.pos <= pos:
@@ -36,6 +42,7 @@ class myInput:
         return True
 
     def insertChar(self, c):
+        ''' Insert character c to buffer at current position. '''
         self.buffer.insert(self.pos, c)
         if self.password:
             utils.cprint(self.hidden * (len(self.buffer) - self.pos), color = self.word_color, end = '')
@@ -45,12 +52,14 @@ class myInput:
         self.pos += 1
 
     def getInput(self):
+        ''' Return content in buffer. '''
         ret = ''.join(self.buffer)
         self.buffer = []
         self.pos = 0
         return ret
 
     def deleteChar(self):
+        ''' Remove character at current cursor position. '''
         if self.pos == len(self.buffer):
             return
         self.buffer.pop(self.pos)
@@ -317,7 +326,12 @@ class Check:
                 self.toggleRow()
 
 class YesNo:
-    def __init__(self, prompt, indent = 0, word_color = colors.foreground["default"]):
+    def __init__(
+            self, 
+            prompt, 
+            indent = 0, 
+            word_color = colors.foreground["default"]
+        ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
@@ -344,7 +358,12 @@ class YesNo:
                 return True if ans.lower() == 'y' else False
 
 class Input:
-    def __init__(self, prompt, indent = 0, word_color = colors.foreground["default"]):
+    def __init__(
+            self, 
+            prompt, 
+            indent = 0, 
+            word_color = colors.foreground["default"]
+        ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
@@ -356,7 +375,13 @@ class Input:
         return myInput(word_color = self.word_color).input()
 
 class Password:
-    def __init__(self, prompt, indent = 0, hidden = '*', word_color = colors.foreground["default"]):
+    def __init__(
+            self, 
+            prompt, 
+            indent = 0, 
+            hidden = '*', 
+            word_color = colors.foreground["default"]
+        ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
@@ -369,7 +394,12 @@ class Password:
         return myInput(password = True, hidden = self.hidden, word_color = self.word_color).input()
 
 class Numbers:
-    def __init__(self, prompt, indent = 0, word_color = colors.foreground["default"]):
+    def __init__(
+            self, 
+            prompt, 
+            indent = 0, 
+            word_color = colors.foreground["default"]
+        ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
@@ -399,11 +429,11 @@ class Numbers:
 
 class Prompt:
     def __init__(self, 
-        components, 
-        spacing = 1, 
-        separator = "",
-        separator_color = colors.foreground["default"]
-    ):
+            components, 
+            spacing = 1, 
+            separator = "",
+            separator_color = colors.foreground["default"]
+        ):
 
         if not components:
             raise ValueError("Prompt components cannot be empty!")
