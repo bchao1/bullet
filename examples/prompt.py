@@ -9,7 +9,7 @@ cli = Prompt(
         Bullet("What is your favorite programming language? ",
               choices = ["C++", "Python", "Javascript", "Not here!"]),
     ],
-    spacing = 2
+    spacing = 1
 )
 
 result = cli.launch()
