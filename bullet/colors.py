@@ -7,6 +7,7 @@ foreground = {
     "magenta" : "\u001b[35m",
     "cyan"   : "\u001b[36m",
     "white"  : "\u001b[37m",
+    "default"  : "\u001b[39m",
 }
 
 background = {
@@ -18,7 +19,11 @@ background = {
     "magenta" : "\u001b[45m",
     "cyan"   : "\u001b[46m",
     "white"  : "\u001b[47m",
+    "default"  : "\u001b[49m",
 }
+
+REVERSE = "\u001b[7m"
+RESET_REVERSE = "\u001b[27m"
 
 RESET = "\u001b[0m"
     
