@@ -71,6 +71,9 @@ result = cli.launch()
 > 👍 Yes/No Questions
 <img src="./assets/gifs/yesno.gif" width="600"/>
 
+> 🔢 Numbers
+<img src="./assets/gifs/numbers.gif" width="600"/>
+
 ## Setting up `bullet`
 > From PyPI
 ```shell
