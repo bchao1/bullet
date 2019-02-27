@@ -104,7 +104,7 @@ def forceWrite(s, end = ''):
     sys.stdout.write(s + end)
     sys.stdout.flush()
 
-def cprint(s, color = colors.foreground["white"], on = colors.background["black"], end = '\n'):
+def cprint(s, color = colors.foreground["default"], on = colors.background["default"], end = '\n'):
     forceWrite(on + color + s + colors.RESET, end = end)
 
 if __name__ == "__main__":
