@@ -186,7 +186,7 @@ class Bullet:
             if i == NEWLINE_KEY:
                 utils.moveCursorDown(len(self.choices) - self.pos)
                 cursor.show_cursor()
-                ret = self.buffer[self.pos]
+                ret = self.choices[self.pos]
                 self.pos = 0
                 return ret
             elif i == ARROW_UP_KEY:
