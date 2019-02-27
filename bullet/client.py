@@ -388,19 +388,31 @@ class Numbers:
                 return float(ans)
 
 class Prompt:
-    def __init__(self, components, spacing):
+    def __init__(self, 
+        components, 
+        spacing = 1, 
+        separator = "",
+        separator_color = colors.foreground["default"]
+    ):
+
         if not components:
             raise ValueError("Prompt components cannot be empty!")
         self.components = components
         self.spacing = spacing
+        self.separator = separator
+        self.separator_color = separator_color
+        self.separator_len = len(max(self.components, key = lambda ui: len(ui.prompt)).prompt)
         self.result = []
-    
+
     def summarize(self):
-        for prompt, answer in self. result:
+        for prompt, answer in self.result:
             print(prompt, answer)
         
     def launch(self):
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
-            utils.forceWrite("\n" * self.spacing)
+            if not self.separator:
+                utils.forceWrite("\n" * self.spacing)
+            else:
+                utils.cprint(self.separator * self.separator_len, color = self.separator_color)
         return self.result

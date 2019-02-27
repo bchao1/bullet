@@ -1,5 +1,6 @@
 from bullet import Bullet, Prompt, Check, Input, YesNo, Numbers
 from bullet import styles
+from bullet import colors
 
 cli = Prompt(
     [
@@ -9,7 +10,9 @@ cli = Prompt(
         Bullet("What is your favorite programming language? ",
               choices = ["C++", "Python", "Javascript", "Not here!"]),
     ],
-    spacing = 1
+    spacing = 1,
+    separator = "-",
+    separator_color = colors.foreground["cyan"]
 )
 
 result = cli.launch()
