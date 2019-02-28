@@ -22,7 +22,9 @@
 - [Using `YesNo` Object](#topic_10)
 - [Using `Password` Object](#topic_11)
 - [Using `Numbers` Object](#topic_12)
-- [Using `Prompt` Object](#topic_13)
+- [Using Prompt Objects](#topic_13)
+    - [Using `VerticalPrompt` Object](#topic14)
+    - [Using `HorizontalPrompt` Object](#topic15)
 
 
 ## Using `bullet` Objects <a name="topic_1"></a>
@@ -124,9 +126,11 @@ client = Bullet(**styles.Greece)
 > Enter numeric values.
 - Non-numeric values will be guarded, and the user will be asked to re-enter.
 
-## ⌨️ Using `Prompt` Object<a name="topic_13"></a>
+## ⌨️ Using `Prompt` Objects<a name="topic_13"></a>
 > Wrapping it all up.
-- Stack `bullet` UI components into one prompt.
+
+### Using `VerticalPrompt` Object<a name="topic_14"></a>
+- Stack `bullet` UI components into one vertically-rendered prompt.
 - Returns a list of tuples `(prompt, result)`.
 - `spacing`: number of lines between adjacent UI components.
 - Or, if `separator` is defined, each UI will be separated by a sequence of `separator` characters.
@@ -146,3 +150,9 @@ cli = Prompt(
 
 result = cli.launch()
 ```
+
+### Using `HorizontalPrompt` Object<a name="topic_15"></a>
+- Link `bullet` UI components into one horizontal prompt. Previous inputs will be cleared.
+- Returns a list of tuples `(prompt, result)`.
+
+> For `Prompt` ojects, call `summarize()` after launching the prompt to print out user input.
