@@ -137,7 +137,7 @@ client = Bullet(**styles.Greece)
 - See `./examples/prompt.py` to get a better understanding.
 
 ```python
-cli = Prompt(
+cli = VerticalPrompt(
     [
         YesNo("Are you a student? "),
         Input("Who are you? "),

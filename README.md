@@ -9,26 +9,15 @@
 </p>
 
 ***
-> 🎨 Customize prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, styling, and etc.
+> 🎨 Customize prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, styling, and etc. Also supports emojis!
 ***
 
-## Usage
-```python
-from bullet import Bullet, YesNo, Numbers, Input, Prompt
+<p align="center">
+    <img src="./assets/gifs/demo.gif" width=600>
+</p>
 
-cli = Prompt(
-    [
-        YesNo("Are you a student? "),
-        Input("Who are you? "),
-        Numbers("How old are you? "),
-        Bullet("What is your favorite programming language? ",
-              choices = ["C++", "Python", "Javascript", "Not here!"]),
-    ],
-    spacing = 1
-)
+> See the sample code for the above demo in `./examples/prompt.py`.
 
-result = cli.launch()
-```
 ## Bullet-lists and checkboxes
 > 🎨 Robust support for user-defined styles.
 <table>

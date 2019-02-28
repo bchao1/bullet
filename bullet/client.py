@@ -398,13 +398,15 @@ class Numbers:
             self, 
             prompt, 
             indent = 0, 
-            word_color = colors.foreground["default"]
+            word_color = colors.foreground["default"],
+            type = float
         ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
         self.word_color = word_color
+        self.type = type
     
     def valid(self, ans):
         try:
@@ -425,7 +427,7 @@ class Numbers:
             if not self.valid(ans):
                 continue
             else:
-                return float(ans)
+                return self.type(ans)
 
 class VerticalPrompt:
     def __init__(
