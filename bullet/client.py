@@ -427,8 +427,9 @@ class Numbers:
             else:
                 return float(ans)
 
-class Prompt:
-    def __init__(self, 
+class VerticalPrompt:
+    def __init__(
+            self, 
             components, 
             spacing = 1, 
             separator = "",
@@ -455,4 +456,158 @@ class Prompt:
                 utils.forceWrite("\n" * self.spacing)
             else:
                 utils.cprint(self.separator * self.separator_len, color = self.separator_color)
+        return self.result
+
+# Unfinished
+'''
+class ScrollBar:
+    def __init__(
+            self, 
+            prompt: str               = "",
+            choices: list             = [], 
+            word_color: str           = colors.foreground["default"],
+            word_on_switch: str       = colors.REVERSE,
+            background_color: str     = colors.background["default"],
+            background_on_switch: str = colors.REVERSE,
+            pad_right                 = 0,
+            indent: int               = 0,
+            align                     = 0,
+            margin: int               = 0,
+            shift: int                = 0,
+            height                    = None
+        ):
+
+        if not choices:
+            raise ValueError("Choices can not be empty!")
+        if indent < 0:
+            raise ValueError("Indent must be > 0!")
+        if margin < 0:
+            raise ValueError("Margin must be > 0!")
+
+        self.prompt = prompt
+        self.choices = choices
+        self.pos = 0 # Position of item at current cursor.
+
+        self.indent = indent
+        self.align = align
+        self.margin = margin
+        self.shift = shift
+        self.pad_right = pad_right
+
+        self.word_color = word_color
+        self.word_on_switch = word_on_switch
+        self.background_color = background_color
+        self.background_on_switch = background_on_switch
+
+        self.max_width = len(max(self.choices, key = len)) + self.pad_right
+        self.height = height if height else len(self.choices)  # Size of the scrollbar window.
+
+        self.top = 0 # Position of the top-most item rendered.
+        # scrollbar won't move if pos is in range [top, top + height)
+        # scrollbar moves up if pos < top
+        # scrollbar moves down if pos > top + height - 1
+    
+    def renderRows(self):
+        for i in range(self.top, self.top + self.height):
+            self.printRow(i)
+            utils.forceWrite('\n')
+            
+    def printRow(self, idx):
+        utils.forceWrite(' ' * (self.indent + self.align))
+        back_color = self.background_on_switch if idx == self.pos else self.background_color
+        word_color = self.word_on_switch if idx == self.pos else self.word_color
+
+        utils.cprint(" " * self.margin, on = back_color, end = '')
+        utils.cprint(self.choices[idx], word_color, back_color, end = '')
+        utils.cprint(' ' * (self.max_width - len(self.choices[idx])), on = back_color, end = '')
+        utils.moveCursorHead()
+
+    def moveRow(self, up = True):
+        if up:
+            if self.pos == self.top:
+                if self.top == 0:
+                    return # Already reached top-most position
+                else:
+                    utils.clearConsoleDown(self.height)
+                    self.pos, self.top = self.pos - 1, self.top - 1
+                    self.renderRows()
+                    utils.moveCursorUp(self.height)
+            else:
+                #utils.moveCursorUp(1)
+                utils.clearLine()
+                old_pos = self.pos
+                self.pos -= 1
+                self.printRow(old_pos)
+                utils.moveCursorUp(1)
+                self.printRow(self.pos)
+        else:
+            if self.pos == self.top + self.height - 1:
+                if self.top + self.height == len(self.choices):
+                    return
+                else:
+                    utils.clearConsoleUp(self.height)
+                    if self.top == 0:
+                        utils.moveCursorDown(1)
+                    self.pos, self.top = self.pos + 1, self.top + 1
+                    self.renderRows()
+            else:
+                utils.clearLine()
+                old_pos = self.pos
+                self.pos += 1
+                self.printRow(old_pos)
+                utils.moveCursorDown(1)
+                self.printRow(self.pos)
+
+    def launch(self):
+        if self.prompt:
+            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
+            utils.forceWrite('\n' * self.shift)
+        self.renderRows()
+        utils.moveCursorUp(self.height)
+        cursor.hide_cursor()
+        while True:
+            c = utils.getchar()
+            i = c if c == UNDEFINED_KEY else ord(c)
+            if i == NEWLINE_KEY:
+                d = self.top + self.height - self.pos
+                if self.pos == len(self.choices) - 1:
+                    d -= 2
+                utils.moveCursorDown(d)
+                cursor.show_cursor()
+                ret = self.choices[self.pos]
+                self.pos = 0
+                return ret
+            elif i == ARROW_UP_KEY:
+                self.moveRow()
+            elif i == ARROW_DOWN_KEY:
+                self.moveRow(up = False)
+'''
+
+class HorizontalPrompt:
+    def __init__(
+            self, 
+            components
+        ):
+        self.idx = 0
+        self.components = components
+        if not components:
+            raise ValueError("Prompt components cannot be empty!")
+        self.result = []
+        self.max_height = self.getMaxHeight()
+
+    def getMaxHeight(self):
+        max_h = 0
+        for ui in self.components:
+            if type(ui).__name__ == "Bullet" or type(ui).__name__ == "Check":
+                max_h = max(max_h, 1 + ui.shift + len(ui.choices))
+        return max_h
+
+    def summarize(self):
+        for prompt, answer in self.result:
+            print(prompt, answer)
+
+    def launch(self):
+        for ui in self.components:
+            self.result.append((ui.prompt, ui.launch()))
+            utils.clearConsoleUp(self.max_height)
         return self.result

@@ -1,8 +1,8 @@
-from bullet import Bullet, Prompt, Check, Input, YesNo, Numbers
+from bullet import Bullet, VerticalPrompt, Check, Input, YesNo, Numbers
 from bullet import styles
 from bullet import colors
 
-cli = Prompt(
+cli = VerticalPrompt(
     [
         YesNo("Are you a student? "),
         Input("Who are you? "),

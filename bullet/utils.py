@@ -82,11 +82,18 @@ def clearLine():
     forceWrite(" " * COLUMNS)
     moveCursorHead()
     
-def clearConsole(n):
+def clearConsoleUp(n):
     ''' Clear n console rows (bottom up). ''' 
     for _ in range(n):
         clearLine()
         moveCursorUp(1)
+
+def clearConsoleDown(n):
+    ''' Clear n console rows (bottom up). ''' 
+    for _ in range(n):
+        clearLine()
+        moveCursorDown(1)
+    moveCursorUp(n)
 
 def forceWrite(s, end = ''):
     ''' Dump everthing in the buffer to the console. '''
