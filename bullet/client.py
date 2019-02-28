@@ -583,7 +583,7 @@ class ScrollBar:
                 self.moveRow(up = False)
 '''
 
-class HorizontalPrompt:
+class SlidePrompt:
     def __init__(
             self, 
             components
@@ -593,14 +593,6 @@ class HorizontalPrompt:
         if not components:
             raise ValueError("Prompt components cannot be empty!")
         self.result = []
-        self.max_height = self.getMaxHeight()
-
-    def getMaxHeight(self):
-        max_h = 0
-        for ui in self.components:
-            if type(ui).__name__ == "Bullet" or type(ui).__name__ == "Check":
-                max_h = max(max_h, 1 + ui.shift + len(ui.choices))
-        return max_h
 
     def summarize(self):
         for prompt, answer in self.result:
@@ -609,5 +601,9 @@ class HorizontalPrompt:
     def launch(self):
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
-            utils.clearConsoleUp(self.max_height)
+            d = 1
+            if type(ui).__name__ == "Bullet" or type(ui).__name__ == "Check":
+                d = 1 + ui.shift + len(ui.choices)
+            utils.clearConsoleUp(d + 1)
+            utils.moveCursorDown(1)
         return self.result

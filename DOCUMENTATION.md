@@ -24,7 +24,7 @@
 - [Using `Numbers` Object](#topic_12)
 - [Using Prompt Objects](#topic_13)
     - [Using `VerticalPrompt` Object](#topic14)
-    - [Using `HorizontalPrompt` Object](#topic15)
+    - [Using `SlidePrompt` Object](#topic15)
 
 
 ## Using `bullet` Objects <a name="topic_1"></a>
@@ -151,8 +151,8 @@ cli = Prompt(
 result = cli.launch()
 ```
 
-### Using `HorizontalPrompt` Object<a name="topic_15"></a>
-- Link `bullet` UI components into one multi-stage prompt. Previous prompts will be cleared upon entering the next stage.
+### Using  `SlidePrompt` Object<a name="topic_15"></a>
+- Link `bullet` UI components into a multi-stage prompt. Previous prompts will be cleared upon entering the next stage.
 - Returns a list of tuples `(prompt, result)`.
 
 > For `Prompt` ojects, call `summarize()` after launching the prompt to print out user input.

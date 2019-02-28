@@ -87,7 +87,7 @@ $ pip install .
 ## Documentation
 📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
 
-> Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `HorizontalPrompt`.
+> Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `SlidePrompt`.
 
 ## Contributing
 🎉 Directly send PRs! I'd also love to see your color schemes, and they can possibly be added to the default style library!
