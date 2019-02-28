@@ -91,3 +91,6 @@ $ pip install .
 
 ## Contributing
 🎉 Directly send PRs! I'd also love to see your color schemes, and they can possibly be added to the default style library!
+
+## Todo
+- Scrollbars
