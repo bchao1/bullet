@@ -461,7 +461,7 @@ class VerticalPrompt:
         return self.result
 
 # Unfinished
-'''
+
 class ScrollBar:
     def __init__(
             self, 
@@ -535,9 +535,10 @@ class ScrollBar:
                     self.renderRows()
                     utils.moveCursorUp(self.height)
             else:
-                #utils.moveCursorUp(1)
                 utils.clearLine()
                 old_pos = self.pos
+                if self.pos == self.top + self.height - 1:
+                    utils.moveCursorUp(1)
                 self.pos -= 1
                 self.printRow(old_pos)
                 utils.moveCursorUp(1)
@@ -572,8 +573,6 @@ class ScrollBar:
             i = c if c == UNDEFINED_KEY else ord(c)
             if i == NEWLINE_KEY:
                 d = self.top + self.height - self.pos
-                if self.pos == len(self.choices) - 1:
-                    d -= 2
                 utils.moveCursorDown(d)
                 cursor.show_cursor()
                 ret = self.choices[self.pos]
@@ -583,7 +582,7 @@ class ScrollBar:
                 self.moveRow()
             elif i == ARROW_DOWN_KEY:
                 self.moveRow(up = False)
-'''
+
 
 class SlidePrompt:
     def __init__(

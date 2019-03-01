@@ -6,3 +6,4 @@ from .client import Password
 from .client import Numbers
 from .client import VerticalPrompt
 from .client import SlidePrompt
+from .client import ScrollBar
