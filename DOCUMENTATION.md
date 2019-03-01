@@ -23,8 +23,8 @@
 - [Using `Password` Object](#topic_11)
 - [Using `Numbers` Object](#topic_12)
 - [Using Prompt Objects](#topic_13)
-    - [Using `VerticalPrompt` Object](#topic14)
-    - [Using `SlidePrompt` Object](#topic15)
+    - [Using `VerticalPrompt` Object](#topic_14)
+    - [Using `SlidePrompt` Object](#topic_15)
 
 
 ## Using `bullet` Objects <a name="topic_1"></a>
