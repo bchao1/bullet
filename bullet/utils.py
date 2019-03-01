@@ -89,7 +89,7 @@ def clearConsoleUp(n):
         moveCursorUp(1)
 
 def clearConsoleDown(n):
-    ''' Clear n console rows (bottom up). ''' 
+    ''' Clear n console rows (top down). ''' 
     for _ in range(n):
         clearLine()
         moveCursorDown(1)

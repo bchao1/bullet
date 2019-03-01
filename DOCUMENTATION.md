@@ -25,6 +25,7 @@
 - [Using Prompt Objects](#topic_13)
     - [Using `VerticalPrompt` Object](#topic_14)
     - [Using `SlidePrompt` Object](#topic_15)
+- [Using `Scrollbar` Object](#topic_16)
 
 
 ## Using `bullet` Objects <a name="topic_1"></a>
@@ -71,6 +72,7 @@ bright_cyan = colors.bright(colors.foreground["cyan"])
 - Use foreground colors:
     - `bullet_color`
     - `check_color`
+    - `pointer_color`
     - `check_on_switch`
     - `word_color`
     - `word_on_switch`
@@ -158,3 +160,9 @@ result = cli.launch()
 - Returns a list of tuples `(prompt, result)`.
 
 > For `Prompt` ojects, call `summarize()` after launching the prompt to print out user input.
+
+## ⌨️ Using `Scrollbar` Object<a name="topic_16"></a>
+> **Enhanced `Bullet`**: Too many items? It's OK!
+- `pointer`: points to item currently selected.
+- `height`: maximum items rendered on terminal.
+    - For example, your can have 100 choices (`len(choices) = 100`) but define `height = 5`.

@@ -467,6 +467,8 @@ class ScrollBar:
             self, 
             prompt: str               = "",
             choices: list             = [], 
+            pointer                   = "→",
+            pointer_color             = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
             word_on_switch: str       = colors.REVERSE,
             background_color: str     = colors.background["default"],
@@ -495,7 +497,9 @@ class ScrollBar:
         self.margin = margin
         self.shift = shift
         self.pad_right = pad_right
+        self.pointer = pointer
 
+        self.pointer_color = pointer_color
         self.word_color = word_color
         self.word_on_switch = word_on_switch
         self.background_color = background_color
@@ -519,7 +523,10 @@ class ScrollBar:
         back_color = self.background_on_switch if idx == self.pos else self.background_color
         word_color = self.word_on_switch if idx == self.pos else self.word_color
 
-        utils.cprint(" " * self.margin, on = back_color, end = '')
+        if idx == self.pos:
+            utils.cprint("{}".format(self.pointer) + " " * self.margin, self.pointer_color, back_color, end = '')
+        else:
+            utils.cprint(" " * (len(self.pointer) + self.margin), self.pointer_color, back_color, end = '')
         utils.cprint(self.choices[idx], word_color, back_color, end = '')
         utils.cprint(' ' * (self.max_width - len(self.choices[idx])), on = back_color, end = '')
         utils.moveCursorHead()
@@ -537,8 +544,6 @@ class ScrollBar:
             else:
                 utils.clearLine()
                 old_pos = self.pos
-                if self.pos == self.top + self.height - 1:
-                    utils.moveCursorUp(1)
                 self.pos -= 1
                 self.printRow(old_pos)
                 utils.moveCursorUp(1)
@@ -549,10 +554,10 @@ class ScrollBar:
                     return
                 else:
                     utils.clearConsoleUp(self.height)
-                    if self.top == 0:
-                        utils.moveCursorDown(1)
+                    utils.moveCursorDown(1)
                     self.pos, self.top = self.pos + 1, self.top + 1
                     self.renderRows()
+                    utils.moveCursorUp(1)
             else:
                 utils.clearLine()
                 old_pos = self.pos
