@@ -362,17 +362,22 @@ class Input:
             self, 
             prompt, 
             indent = 0, 
-            word_color = colors.foreground["default"]
+            word_color = colors.foreground["default"],
+            strip = False,
+            pattern = ""
         ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
         self.word_color = word_color
+        self.strip = strip
+        self.pattern = pattern
         
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
-        return myInput(word_color = self.word_color).input()
+        result = myInput(word_color = self.word_color).input()
+        return result.strip() if self.strip else result
 
 class Password:
     def __init__(
