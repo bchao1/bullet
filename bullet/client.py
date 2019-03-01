@@ -4,6 +4,7 @@ from . import colors
 from . import utils
 from . import cursor
 import readline
+import re
 
 # Reusable private utility class
 class myInput:
@@ -373,10 +374,26 @@ class Input:
         self.word_color = word_color
         self.strip = strip
         self.pattern = pattern
-        
+    
+    def valid(self, ans):
+        if not bool(re.match(self.pattern, ans)):
+            utils.moveCursorUp(1)
+            utils.forceWrite(' ' * self.indent + self.prompt)
+            utils.forceWrite(' ' * len(ans))
+            utils.forceWrite('\b' * len(ans))
+            return False
+        return True
+
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
-        result = myInput(word_color = self.word_color).input()
+        sess = myInput(word_color = self.word_color)
+        if not self.pattern:
+            result = sess.input()
+        else:
+            while True:
+                result = sess.input()
+                if self.valid(result):
+                    break
         return result.strip() if self.strip else result
 
 class Password:

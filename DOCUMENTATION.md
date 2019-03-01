@@ -119,6 +119,9 @@ client = Bullet(**styles.Greece)
 ## ⌨️ Using `Input` Object<a name="topic_9"></a>
 > Just vanilla user input.
 
+- `strip: bool`: whether to strip trailing spaces.
+- `pattern: str`: Default is `""`. If defined, user input should match pattern.
+
 ## ⌨️ Using `YesNo` Object<a name="topic_10"></a>
 > Guarded Yes/No question.
 - Only enter `y/Y` or `n/N`. Other invalid inputs will be guarded, and the user will be asked to re-enter.
