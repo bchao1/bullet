@@ -1,6 +1,8 @@
 import sys
 import os
 
+# Show and hide cursors
+
 if os.name == 'nt':
     import msvcrt
     import ctypes

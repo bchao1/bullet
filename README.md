@@ -13,7 +13,7 @@
 ***
 
 <p align="center">
-    <img src="./assets/gifs/demo.gif" width=600>
+    <img src="./assets/gifs/demo.gif" width=800>
 </p>
 
 > See the sample code for the above demo in `./examples/prompt.py`.
