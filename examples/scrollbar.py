@@ -15,4 +15,6 @@ cli = ScrollBar(
     background_color=colors.background["black"],
     background_on_switch=colors.background["black"]
 )
+print('\n')
 result = cli.launch()
+print('\n')

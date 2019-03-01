@@ -18,6 +18,14 @@
 
 > See the sample code for the above demo in `./examples/prompt.py`.
 
+## ✨ New Feauture: `Scrollbar`
+
+<p align="center">
+    <img src="./assets/gifs/scrollbar.gif" width=400>
+</p>
+
+> See the sample code for the above demo in `./examples/scrollbar.py`.
+
 ## Bullet-lists and checkboxes
 > 🎨 Robust support for user-defined styles.
 <table>
