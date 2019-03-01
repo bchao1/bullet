@@ -46,10 +46,13 @@ cli = Bullet(choices = ["first item", "second item", "third item"])
 cli = Bullet(bullet = "★")
 cli = Check(check = "√")
 cli = Password(hidden = "*")
+cli = ScrollBar(pointer = "→")
 ```
 > You can also use emojis! 
 
 ## Customize Colors<a name="topic_4"></a>
+> It is recommended to EXPLICITLY specify ALL colors for an UI object.
+
 ```python
 from bullet import colors
 ```
