@@ -71,6 +71,7 @@ $ pip install bullet
 > Build from Source
 ```shell
 $ git clone https://github.com/Mckinsey666/bullet.git
+$ cd bullet
 $ pip install .
 ```
 ## Documentation
