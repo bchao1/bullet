@@ -31,7 +31,7 @@
 > Always create an UI object with a prompt specified.
 ```python
 from bullet import Bullet, Check, YesNo, Input # and etc...
-cli = Bullet(prompt = "...")  # Create a Bullet or Check object
+cli = Bullet(prompt = "Choose from the items below: ")  # Create a Bullet or Check object
 result = cli.launch()  # Launch a prompt
 ```
 
@@ -46,6 +46,7 @@ cli = Bullet(bullet = "★")
 cli = Check(check = "√")
 cli = Password(hidden = "*")
 ```
+> You can also use emojis! 
 
 ## Customize Colors<a name="topic_4"></a>
 ```python
@@ -125,6 +126,7 @@ client = Bullet(**styles.Greece)
 ## ⌨️ Using `Numbers` Object<a name="topic_12"></a>
 > Enter numeric values.
 - Non-numeric values will be guarded, and the user will be asked to re-enter.
+- Define `type` to cast return value. For example, `type = float`, will cast return value to `float`.
 
 ## ⌨️ Using `Prompt` Objects<a name="topic_13"></a>
 > Wrapping it all up.
