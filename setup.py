@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
       name='bullet',
-      version='1.4.0',
+      version='1.5.0',
       description='Beautiful Python prompts made simple.',
       long_description="Extensive support for Python list prompts \
             formatting and colors",

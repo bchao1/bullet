@@ -18,7 +18,7 @@
 
 > See the sample code for the above demo in `./examples/prompt.py`.
 
-## ✨ New Feauture: `Scrollbar`
+## ✨ New Feauture: `ScrollBar`
 
 <p align="center">
     <img src="./assets/gifs/scrollbar.gif" width=400>
