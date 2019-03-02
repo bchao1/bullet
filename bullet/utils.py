@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import os
 import sys
 import tty, termios
@@ -8,16 +9,44 @@ from . import colors
 _, n = os.popen('stty size', 'r').read().split()
 COLUMNS = int(n)  ## Size of console
 
+
+def _enable_ctrl_c(fd):
+    '''when fd is in raw mode, all special processing is disabled.
+    This function re-enables the special processing for the INTR character
+    (usually CTRL+C) by OR'ing in termios.ISIG to mode[LFLAG].
+
+    See also
+    https://github.com/python/cpython/blob/3.7/Lib/tty.py
+    http://man7.org/linux/man-pages/man3/termios.3.html
+    https://stackoverflow.com/questions/51509348/python-tty-setraw-ctrl-c-doesnt-work-getch
+    '''
+    LFLAG = 3
+    mode = termios.tcgetattr(fd)
+    mode[LFLAG] = mode[LFLAG] | termios.ISIG
+    termios.tcsetattr(fd, termios.TCIOFLUSH, mode)
+
+
+@contextmanager
+def make_raw_except_interrupt(fd):
+    old_settings = termios.tcgetattr(fd)
+    tty.setraw(fd)
+    _enable_ctrl_c(fd)
+    try:
+        yield
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+
 def mygetc():
     ''' Get raw characters from input. '''
     fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(fd)
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
+    with make_raw_except_interrupt(fd):
+        try:
+            return sys.stdin.read(1)
+        except KeyboardInterrupt:
+            clearLine()
+            sys.exit(0)
+
 
 def getchar():
     ''' Character input parser. '''
@@ -27,10 +56,10 @@ def getchar():
        ord(c) == TAB_KEY        or \
        ord(c) == NEWLINE_KEY:
        return c
-    
+
     elif ord(c) == BACK_SPACE_KEY:
         return c
-    
+
     elif ord(c) == ESC_KEY:
         combo = mygetc()
         if ord(combo) == MOD_KEY_INT:
@@ -64,7 +93,7 @@ def moveCursorLeft(n):
 def moveCursorRight(n):
     ''' Move cursor right n columns. '''
     forceWrite("\033[{}C".format(n))
-    
+
 def moveCursorUp(n):
     ''' Move cursor up n rows. '''
     forceWrite("\033[{}A".format(n))
@@ -81,15 +110,15 @@ def clearLine():
     ''' Clear content of one line on the console. '''
     forceWrite(" " * COLUMNS)
     moveCursorHead()
-    
+
 def clearConsoleUp(n):
-    ''' Clear n console rows (bottom up). ''' 
+    ''' Clear n console rows (bottom up). '''
     for _ in range(n):
         clearLine()
         moveCursorUp(1)
 
 def clearConsoleDown(n):
-    ''' Clear n console rows (top down). ''' 
+    ''' Clear n console rows (top down). '''
     for _ in range(n):
         clearLine()
         moveCursorDown(1)
@@ -101,9 +130,9 @@ def forceWrite(s, end = ''):
     sys.stdout.flush()
 
 def cprint(
-        s: str, 
-        color: str = colors.foreground["default"], 
-        on: str = colors.background["default"], 
+        s: str,
+        color: str = colors.foreground["default"],
+        on: str = colors.background["default"],
         end: str = '\n'
     ):
     ''' Colored print function.
@@ -111,7 +140,7 @@ def cprint(
         s: The string to be printed.
         color: The color of the string.
         on: The color of the background.
-        end: Last character appended. 
+        end: Last character appended.
     Returns:
         None
     '''
