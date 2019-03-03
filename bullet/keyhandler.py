@@ -1,4 +1,4 @@
-from .charDef import *
+from .charDef import UNDEFINED_KEY
 from . import utils
 
 def register(key):
