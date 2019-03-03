@@ -3,6 +3,7 @@ from .charDef import *
 from . import colors
 from . import utils
 from . import cursor
+from . import keyhandler
 import readline
 import re
 
@@ -484,6 +485,7 @@ class VerticalPrompt:
 
 # Unfinished
 
+@keyhandler.init
 class ScrollBar:
     def __init__(
             self, 
@@ -568,43 +570,54 @@ class ScrollBar:
         utils.cprint(indicator, color = self.indicator_color, end = '')
         utils.moveCursorHead()
 
-    def moveRow(self, up = True):
-        if up:
-            if self.pos == self.top:
-                if self.top == 0:
-                    return # Already reached top-most position
-                else:
-                    utils.clearConsoleDown(self.height)
-                    self.pos, self.top = self.pos - 1, self.top - 1
-                    self.renderRows()
-                    utils.moveCursorUp(self.height)
+    @keyhandler.register(ARROW_UP_KEY)
+    def moveUp(self):
+        if self.pos == self.top:
+            if self.top == 0:
+                return # Already reached top-most position
             else:
-                utils.clearLine()
-                old_pos = self.pos
-                self.pos -= 1
-                show_arrow = (old_pos == self.top + self.height - 1 and
-                              self.top + self.height < len(self.choices))
-                self.printRow(old_pos, indicator = self.down_indicator if show_arrow else '')
-                utils.moveCursorUp(1)
-                self.printRow(self.pos)
+                utils.clearConsoleDown(self.height)
+                self.pos, self.top = self.pos - 1, self.top - 1
+                self.renderRows()
+                utils.moveCursorUp(self.height)
         else:
-            if self.pos == self.top + self.height - 1:
-                if self.top + self.height == len(self.choices):
-                    return
-                else:
-                    utils.clearConsoleUp(self.height)
-                    utils.moveCursorDown(1)
-                    self.pos, self.top = self.pos + 1, self.top + 1
-                    self.renderRows()
-                    utils.moveCursorUp(1)
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos -= 1
+            show_arrow = (old_pos == self.top + self.height - 1 and
+                          self.top + self.height < len(self.choices))
+            self.printRow(old_pos, indicator = self.down_indicator if show_arrow else '')
+            utils.moveCursorUp(1)
+            self.printRow(self.pos)
+
+    @keyhandler.register(ARROW_DOWN_KEY)
+    def moveDown(self):
+        if self.pos == self.top + self.height - 1:
+            if self.top + self.height == len(self.choices):
+                return
             else:
-                utils.clearLine()
-                old_pos = self.pos
-                self.pos += 1
-                show_arrow = (old_pos == self.top and self.top > 0)
-                self.printRow(old_pos, indicator = self.up_indicator if show_arrow else '')
+                utils.clearConsoleUp(self.height)
                 utils.moveCursorDown(1)
-                self.printRow(self.pos)
+                self.pos, self.top = self.pos + 1, self.top + 1
+                self.renderRows()
+                utils.moveCursorUp(1)
+        else:
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos += 1
+            show_arrow = (old_pos == self.top and self.top > 0)
+            self.printRow(old_pos, indicator = self.up_indicator if show_arrow else '')
+            utils.moveCursorDown(1)
+            self.printRow(self.pos)
+
+    @keyhandler.register(NEWLINE_KEY)
+    def accept(self):
+        d = self.top + self.height - self.pos
+        utils.moveCursorDown(d)
+        cursor.show_cursor()
+        ret = self.choices[self.pos]
+        self.pos = 0
+        return ret
 
     def launch(self):
         if self.prompt:
@@ -614,20 +627,9 @@ class ScrollBar:
         utils.moveCursorUp(self.height)
         cursor.hide_cursor()
         while True:
-            c = utils.getchar()
-            i = c if c == UNDEFINED_KEY else ord(c)
-            if i == NEWLINE_KEY:
-                d = self.top + self.height - self.pos
-                utils.moveCursorDown(d)
-                cursor.show_cursor()
-                ret = self.choices[self.pos]
-                self.pos = 0
+            ret = self.handle_input()
+            if ret is not None:
                 return ret
-            elif i == ARROW_UP_KEY:
-                self.moveRow()
-            elif i == ARROW_DOWN_KEY:
-                self.moveRow(up = False)
-
 
 class SlidePrompt:
     def __init__(
