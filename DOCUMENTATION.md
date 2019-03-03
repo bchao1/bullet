@@ -16,17 +16,20 @@
     - [Customize Colors](#topic_4)
     - [Formatting](#topic_5)
     - [Use Default Style Schemes](#topic_6)
-- [Using `Bullet` Object](#topic_7)
-- [Using `Check` Object](#topic_8)
-- [Using `Input` Object](#topic_9)
-- [Using `YesNo` Object](#topic_10)
-- [Using `Password` Object](#topic_11)
-- [Using `Numbers` Object](#topic_12)
-- [Using Prompt Objects](#topic_13)
-    - [Using `VerticalPrompt` Object](#topic_14)
-    - [Using `SlidePrompt` Object](#topic_15)
-- [Using `ScrollBar` Object](#topic_16)
-
+- `bullet` Objects
+    - [Using `Bullet` Object](#topic_7)
+    - [Using `Check` Object](#topic_8)
+    - [Using `Input` Object](#topic_9)
+    - [Using `YesNo` Object](#topic_10)
+    - [Using `Password` Object](#topic_11)
+    - [Using `Numbers` Object](#topic_12)
+    - [Using Prompt Objects](#topic_13)
+        - [Using `VerticalPrompt` Object](#topic_14)
+        - [Using `SlidePrompt` Object](#topic_15)
+    - [Using `ScrollBar` Object](#topic_16)
+- More Customization: Extending Existing Prompts
+    - [Registering Keys and Overriding Methods](#topic_17)
+    - [Extending a Base Class](#topic_18)
 
 ## Using `bullet` Objects <a name="topic_1"></a>
 > Always create an UI object with a prompt specified.
@@ -76,6 +79,7 @@ bright_cyan = colors.bright(colors.foreground["cyan"])
     - `bullet_color`
     - `check_color`
     - `pointer_color`
+    - `indicator_color`
     - `check_on_switch`
     - `word_color`
     - `word_on_switch`
@@ -170,5 +174,6 @@ result = cli.launch()
 ## ⌨️ Using `ScrollBar` Object<a name="topic_16"></a>
 > **Enhanced `Bullet`**: Too many items? It's OK!
 - `pointer`: points to item currently selected.
+- `up_indicator`, `down_indicator`: indicators shown in first and last row of the rendered items.
 - `height`: maximum items rendered on terminal.
     - For example, your can have 100 choices (`len(choices) = 100`) but define `height = 5`.
