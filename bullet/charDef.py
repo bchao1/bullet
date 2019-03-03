@@ -1,6 +1,6 @@
 import sys
 
-# Keyboard mapping macros 
+# Keyboard mapping macros
 
 LINE_BEGIN_KEY  = 1
 LINE_END_KEY    = 5
@@ -31,3 +31,5 @@ UNDEFINED_KEY   = sys.maxsize
 BEEP_CHAR       = 7
 BACK_SPACE_CHAR = 8
 SPACE_CHAR      = ord(' ')
+VIM_UP_KEY      = 107  # k
+VIM_DOWN_KEY    = 106  # j
