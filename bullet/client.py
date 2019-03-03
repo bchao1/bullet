@@ -106,6 +106,7 @@ class myInput:
                 else:
                     self.insertChar(c)
 
+@keyhandler.init
 class Bullet:
     def __init__(
             self, 
@@ -168,27 +169,42 @@ class Bullet:
         utils.cprint(' ' * (self.max_width - len(self.choices[idx])), on = back_color, end = '')
         utils.moveCursorHead()
 
-    def moveBullet(self, up = True):
-        if up:
-            if self.pos - 1 < 0:
-                return
-            else:
-                utils.clearLine()
-                old_pos = self.pos
-                self.pos -= 1
-                self.printBullet(old_pos)
-                utils.moveCursorUp(1)
-                self.printBullet(self.pos)
+    @keyhandler.register(ARROW_UP_KEY)
+    def moveUp(self):
+        if self.pos - 1 < 0:
+            return
         else:
-            if self.pos + 1 >= len(self.choices):
-                return
-            else:
-                utils.clearLine()
-                old_pos = self.pos
-                self.pos += 1
-                self.printBullet(old_pos)
-                utils.moveCursorDown(1)
-                self.printBullet(self.pos)
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos -= 1
+            self.printBullet(old_pos)
+            utils.moveCursorUp(1)
+            self.printBullet(self.pos)
+
+    @keyhandler.register(ARROW_DOWN_KEY)
+    def moveDown(self):
+        if self.pos + 1 >= len(self.choices):
+            return
+        else:
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos += 1
+            self.printBullet(old_pos)
+            utils.moveCursorDown(1)
+            self.printBullet(self.pos)
+
+    @keyhandler.register(NEWLINE_KEY)
+    def accept(self):
+        utils.moveCursorDown(len(self.choices) - self.pos)
+        cursor.show_cursor()
+        ret = self.choices[self.pos]
+        self.pos = 0
+        return ret
+
+    @keyhandler.register(INTERRUPT_KEY)
+    def interrupt(self):
+        utils.moveCursorDown(len(self.choices) - self.pos)
+        raise KeyboardInterrupt
 
     def launch(self):
         if self.prompt:
@@ -198,19 +214,11 @@ class Bullet:
         utils.moveCursorUp(len(self.choices))
         cursor.hide_cursor()
         while True:
-            c = utils.getchar()
-            i = c if c == UNDEFINED_KEY else ord(c)
-            if i == NEWLINE_KEY:
-                utils.moveCursorDown(len(self.choices) - self.pos)
-                cursor.show_cursor()
-                ret = self.choices[self.pos]
-                self.pos = 0
+            ret = self.handle_input()
+            if ret is not None:
                 return ret
-            elif i == ARROW_UP_KEY:
-                self.moveBullet()
-            elif i == ARROW_DOWN_KEY:
-                self.moveBullet(up = False)
 
+@keyhandler.init
 class Check:
     def __init__(
             self, 
@@ -277,31 +285,48 @@ class Check:
         utils.cprint(' ' * (self.max_width - len(self.choices[idx])), on = back_color, end = '')
         utils.moveCursorHead()
 
+    @keyhandler.register(SPACE_CHAR)
     def toggleRow(self):
         self.checked[self.pos] = not self.checked[self.pos]
         self.printRow(self.pos)
 
-    def movePos(self, up = True):
-        if up:
-            if self.pos - 1 < 0:
-                return
-            else:
-                utils.clearLine()
-                old_pos = self.pos
-                self.pos -= 1
-                self.printRow(old_pos)
-                utils.moveCursorUp(1)
-                self.printRow(self.pos)
+    @keyhandler.register(ARROW_UP_KEY)
+    def moveUp(self):
+        if self.pos - 1 < 0:
+            return
         else:
-            if self.pos + 1 >= len(self.choices):
-                return
-            else:
-                utils.clearLine()
-                old_pos = self.pos
-                self.pos += 1
-                self.printRow(old_pos)
-                utils.moveCursorDown(1)
-                self.printRow(self.pos)
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos -= 1
+            self.printRow(old_pos)
+            utils.moveCursorUp(1)
+            self.printRow(self.pos)
+
+    @keyhandler.register(ARROW_DOWN_KEY)
+    def moveDown(self):
+        if self.pos + 1 >= len(self.choices):
+            return
+        else:
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos += 1
+            self.printRow(old_pos)
+            utils.moveCursorDown(1)
+            self.printRow(self.pos)
+
+    @keyhandler.register(NEWLINE_KEY)
+    def accept(self):
+        utils.moveCursorDown(len(self.choices) - self.pos)
+        cursor.show_cursor()
+        ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
+        self.pos = 0
+        self.checked = [False] * len(self.choices)
+        return ret
+
+    @keyhandler.register(INTERRUPT_KEY)
+    def interrupt(self):
+        utils.moveCursorDown(len(self.choices) - self.pos)
+        raise KeyboardInterrupt
 
     def launch(self):
         if self.prompt:
@@ -311,21 +336,9 @@ class Check:
         utils.moveCursorUp(len(self.choices))
         cursor.hide_cursor()
         while True:
-            c = utils.getchar()
-            i = c if c == UNDEFINED_KEY else ord(c)
-            if i == NEWLINE_KEY:
-                utils.moveCursorDown(len(self.choices) - self.pos)
-                cursor.show_cursor()
-                ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
-                self.pos = 0
-                self.checked = [False] * len(self.choices)
+            ret = self.handle_input()
+            if ret is not None:
                 return ret
-            elif i == ARROW_UP_KEY:
-                self.movePos()
-            elif i == ARROW_DOWN_KEY:
-                self.movePos(up = False)
-            elif i == SPACE_CHAR:
-                self.toggleRow()
 
 class YesNo:
     def __init__(
