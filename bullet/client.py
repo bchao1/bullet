@@ -490,7 +490,10 @@ class ScrollBar:
             prompt: str               = "",
             choices: list             = [], 
             pointer                   = "→",
-            pointer_color             = colors.foreground["default"],
+            up_indicator: str         = "↑",
+            down_indicator: str       = "↓",
+            pointer_color: str        = colors.foreground["default"],
+            indicator_color: str      = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
             word_on_switch: str       = colors.REVERSE,
             background_color: str     = colors.background["default"],
@@ -520,8 +523,11 @@ class ScrollBar:
         self.shift = shift
         self.pad_right = pad_right
         self.pointer = pointer
+        self.up_indicator = up_indicator
+        self.down_indicator = down_indicator
 
         self.pointer_color = pointer_color
+        self.indicator_color = indicator_color
         self.word_color = word_color
         self.word_on_switch = word_on_switch
         self.background_color = background_color
@@ -536,11 +542,18 @@ class ScrollBar:
         # scrollbar moves down if pos > top + height - 1
     
     def renderRows(self):
-        for i in range(self.top, self.top + self.height):
+        self.printRow(self.top, indicator = self.up_indicator if self.top != 0 else '')
+        utils.forceWrite('\n')
+
+        i = self.top
+        for i in range(self.top + 1, self.top + self.height - 1):
             self.printRow(i)
             utils.forceWrite('\n')
+
+        self.printRow(i + 1, indicator= self.down_indicator if self.top + self.height != len(self.choices) else '')
+        utils.forceWrite('\n')
             
-    def printRow(self, idx):
+    def printRow(self, idx, indicator=''):
         utils.forceWrite(' ' * (self.indent + self.align))
         back_color = self.background_on_switch if idx == self.pos else self.background_color
         word_color = self.word_on_switch if idx == self.pos else self.word_color
@@ -551,6 +564,7 @@ class ScrollBar:
             utils.cprint(" " * (len(self.pointer) + self.margin), self.pointer_color, back_color, end = '')
         utils.cprint(self.choices[idx], word_color, back_color, end = '')
         utils.cprint(' ' * (self.max_width - len(self.choices[idx])), on = back_color, end = '')
+        utils.cprint(indicator, color = self.indicator_color, end = '')
         utils.moveCursorHead()
 
     def moveRow(self, up = True):
@@ -567,7 +581,9 @@ class ScrollBar:
                 utils.clearLine()
                 old_pos = self.pos
                 self.pos -= 1
-                self.printRow(old_pos)
+                show_arrow = (old_pos == self.top + self.height - 1 and
+                              self.top + self.height < len(self.choices))
+                self.printRow(old_pos, indicator = self.down_indicator if show_arrow else '')
                 utils.moveCursorUp(1)
                 self.printRow(self.pos)
         else:
@@ -584,7 +600,8 @@ class ScrollBar:
                 utils.clearLine()
                 old_pos = self.pos
                 self.pos += 1
-                self.printRow(old_pos)
+                show_arrow = (old_pos == self.top and self.top > 0)
+                self.printRow(old_pos, indicator = self.up_indicator if show_arrow else '')
                 utils.moveCursorDown(1)
                 self.printRow(self.pos)
 
