@@ -16,15 +16,16 @@ def init(cls):
     return _KeyHandlerRegisterer(cls.__name__, cls.__bases__, cls.__dict__.copy())
 
 class _KeyHandlerRegisterer(type):
-    def __new__(cls, name, bases, classdict):
-        result = super().__new__(cls, name, bases, classdict)
-        setattr(result, 'key_handler', {})
+    def __new__(metacls, name, bases, classdict):
+        result = super().__new__(metacls, name, bases, classdict)
+        if not hasattr(result, '_key_handler'):
+            setattr(result, '_key_handler', {})
         setattr(result, 'handle_input', _KeyHandlerRegisterer.handle_input)
 
         for value in classdict.values():
             handled_key = getattr(value, '_handle_key', None)
             if handled_key is not None:
-                result.key_handler[handled_key] = value
+                result._key_handler[handled_key] = value
 
         return result
 
@@ -32,7 +33,7 @@ class _KeyHandlerRegisterer(type):
     def handle_input(self):
         c = utils.getchar()
         i = c if c == UNDEFINED_KEY else ord(c)
-        handler = self.key_handler.get(i)
+        handler = self._key_handler.get(i)
         if handler is not None:
             return handler(self)
         else:
