@@ -534,7 +534,8 @@ class ScrollBar:
         self.background_on_switch = background_on_switch
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
-        self.height = height if height else len(self.choices)  # Size of the scrollbar window.
+        self.height = min(len(self.choices), # Size of the scrollbar window.
+                          height if height else len(self.choices))
 
         self.top = 0 # Position of the top-most item rendered.
         # scrollbar won't move if pos is in range [top, top + height)
