@@ -31,3 +31,4 @@ UNDEFINED_KEY   = sys.maxsize
 BEEP_CHAR       = 7
 BACK_SPACE_CHAR = 8
 SPACE_CHAR      = ord(' ')
+INTERRUPT_KEY   = 3

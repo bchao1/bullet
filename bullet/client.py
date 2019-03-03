@@ -619,6 +619,12 @@ class ScrollBar:
         self.pos = 0
         return ret
 
+    @keyhandler.register(INTERRUPT_KEY)
+    def interrupt(self):
+        d = self.top + self.height - self.pos
+        utils.moveCursorDown(d)
+        raise KeyboardInterrupt
+
     def launch(self):
         if self.prompt:
             utils.forceWrite(' ' * self.indent + self.prompt + '\n')
