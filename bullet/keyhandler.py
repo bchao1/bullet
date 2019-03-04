@@ -7,7 +7,10 @@ def register(key):
     that it can found by _KeyHandlerRegisterer.
     '''
     def wrap(func):
-        setattr(func, '_handle_key', key)
+        if not hasattr(func, '_handle_key'):
+            setattr(func, '_handle_key', [key])
+        else:
+            func._handle_key.append(key)
         return func
     return wrap
 
@@ -23,9 +26,9 @@ class _KeyHandlerRegisterer(type):
         setattr(result, 'handle_input', _KeyHandlerRegisterer.handle_input)
 
         for value in classdict.values():
-            handled_key = getattr(value, '_handle_key', None)
-            if handled_key is not None:
-                result._key_handler[handled_key] = value
+            handled_keys = getattr(value, '_handle_key', [])
+            for key in handled_keys:
+                result._key_handler[key] = value
 
         return result
 
