@@ -9,12 +9,12 @@ import re
 
 # Reusable private utility class
 class myInput:
-    def __init__(self, 
-            word_color: str = colors.foreground["default"], 
-            password: bool = False, 
+    def __init__(self,
+            word_color: str = colors.foreground["default"],
+            password: bool = False,
             hidden: str = '*'
         ):
-        ''' Constructor for myInput 
+        ''' Constructor for myInput
         Args:
             word_color: color of input characters.
             password: Whether input is password.
@@ -109,10 +109,10 @@ class myInput:
 @keyhandler.init
 class Bullet:
     def __init__(
-            self, 
+            self,
             prompt: str               = "",
-            choices: list             = [], 
-            bullet: str               = "●", 
+            choices: list             = [],
+            bullet: str               = "●",
             bullet_color: str         = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
             word_on_switch: str       = colors.REVERSE,
@@ -151,12 +151,12 @@ class Bullet:
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
-    
+
     def renderBullets(self):
         for i in range(len(self.choices)):
             self.printBullet(i)
             utils.forceWrite('\n')
-            
+
     def printBullet(self, idx):
         utils.forceWrite(' ' * (self.indent + self.align))
         back_color = self.background_on_switch if idx == self.pos else self.background_color
@@ -170,6 +170,7 @@ class Bullet:
         utils.moveCursorHead()
 
     @keyhandler.register(ARROW_UP_KEY)
+    @keyhandler.register(VIM_UP_KEY)
     def moveUp(self):
         if self.pos - 1 < 0:
             return
@@ -182,6 +183,7 @@ class Bullet:
             self.printBullet(self.pos)
 
     @keyhandler.register(ARROW_DOWN_KEY)
+    @keyhandler.register(VIM_DOWN_KEY)
     def moveDown(self):
         if self.pos + 1 >= len(self.choices):
             return
@@ -227,10 +229,10 @@ class Bullet:
 @keyhandler.init
 class Check:
     def __init__(
-            self, 
+            self,
             prompt: str               = "",
-            choices: list             = [], 
-            check: str                = "√", 
+            choices: list             = [],
+            check: str                = "√",
             check_color: str          = colors.foreground["default"],
             check_on_switch: str      = colors.REVERSE,
             word_color: str           = colors.foreground["default"],
@@ -272,12 +274,12 @@ class Check:
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
-    
+
     def renderRows(self):
         for i in range(len(self.choices)):
             self.printRow(i)
             utils.forceWrite('\n')
-            
+
     def printRow(self, idx):
         utils.forceWrite(' ' * (self.indent + self.align))
         back_color = self.background_on_switch if idx == self.pos else self.background_color
@@ -297,6 +299,7 @@ class Check:
         self.printRow(self.pos)
 
     @keyhandler.register(ARROW_UP_KEY)
+    @keyhandler.register(VIM_UP_KEY)
     def moveUp(self):
         if self.pos - 1 < 0:
             return
@@ -309,6 +312,7 @@ class Check:
             self.printRow(self.pos)
 
     @keyhandler.register(ARROW_DOWN_KEY)
+    @keyhandler.register(VIM_DOWN_KEY)
     def moveDown(self):
         if self.pos + 1 >= len(self.choices):
             return
@@ -357,8 +361,8 @@ class Check:
 
 class YesNo:
     def __init__(
-            self, 
-            prompt, 
+            self,
+            prompt,
             indent = 0,
             word_color = colors.foreground["default"]
         ):
@@ -376,7 +380,7 @@ class YesNo:
             utils.forceWrite('\b' * len(ans))
             return False
         return True
-        
+
     def launch(self, default = 'y'):
         default = default.lower()
         if not (default == 'y' or default == 'n'):
@@ -394,9 +398,9 @@ class YesNo:
 
 class Input:
     def __init__(
-            self, 
-            prompt, 
-            indent = 0, 
+            self,
+            prompt,
+            indent = 0,
             word_color = colors.foreground["default"],
             strip = False,
             pattern = ""
@@ -408,7 +412,7 @@ class Input:
         self.word_color = word_color
         self.strip = strip
         self.pattern = pattern
-    
+
     def valid(self, ans):
         if not bool(re.match(self.pattern, ans)):
             utils.moveCursorUp(1)
@@ -443,10 +447,10 @@ class Input:
 
 class Password:
     def __init__(
-            self, 
-            prompt, 
-            indent = 0, 
-            hidden = '*', 
+            self,
+            prompt,
+            indent = 0,
+            hidden = '*',
             word_color = colors.foreground["default"]
         ):
         self.indent = indent
@@ -455,16 +459,16 @@ class Password:
         self.prompt = prompt
         self.hidden = hidden
         self.word_color = word_color
-        
+
     def launch(self):
         utils.forceWrite(' ' * self.indent + self.prompt)
         return myInput(password = True, hidden = self.hidden, word_color = self.word_color).input()
 
 class Numbers:
     def __init__(
-            self, 
-            prompt, 
-            indent = 0, 
+            self,
+            prompt,
+            indent = 0,
             word_color = colors.foreground["default"],
             type = float
         ):
@@ -474,7 +478,7 @@ class Numbers:
         self.prompt = prompt
         self.word_color = word_color
         self.type = type
-    
+
     def valid(self, ans):
         try:
             float(ans)
@@ -485,7 +489,7 @@ class Numbers:
             utils.forceWrite(' ' * len(ans))
             utils.forceWrite('\b' * len(ans))
             return False
-        
+
     def launch(self, default = None):
         if default is not None:
             try:
@@ -505,9 +509,9 @@ class Numbers:
 
 class VerticalPrompt:
     def __init__(
-            self, 
-            components, 
-            spacing = 1, 
+            self,
+            components,
+            spacing = 1,
             separator = "",
             separator_color = colors.foreground["default"]
         ):
@@ -524,7 +528,7 @@ class VerticalPrompt:
     def summarize(self):
         for prompt, answer in self.result:
             print(prompt, answer)
-        
+
     def launch(self):
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
@@ -537,9 +541,9 @@ class VerticalPrompt:
 @keyhandler.init
 class ScrollBar:
     def __init__(
-            self, 
+            self,
             prompt: str               = "",
-            choices: list             = [], 
+            choices: list             = [],
             pointer                   = "→",
             up_indicator: str         = "↑",
             down_indicator: str       = "↓",
@@ -592,7 +596,7 @@ class ScrollBar:
         # scrollbar won't move if pos is in range [top, top + height)
         # scrollbar moves up if pos < top
         # scrollbar moves down if pos > top + height - 1
-    
+
     def renderRows(self):
         self.printRow(self.top, indicator = self.up_indicator if self.top != 0 else '')
         utils.forceWrite('\n')
@@ -604,7 +608,7 @@ class ScrollBar:
 
         self.printRow(i + 1, indicator= self.down_indicator if self.top + self.height != len(self.choices) else '')
         utils.forceWrite('\n')
-            
+
     def printRow(self, idx, indicator=''):
         utils.forceWrite(' ' * (self.indent + self.align))
         back_color = self.background_on_switch if idx == self.pos else self.background_color
@@ -620,6 +624,7 @@ class ScrollBar:
         utils.moveCursorHead()
 
     @keyhandler.register(ARROW_UP_KEY)
+    @keyhandler.register(VIM_UP_KEY)
     def moveUp(self):
         if self.pos == self.top:
             if self.top == 0:
@@ -640,6 +645,7 @@ class ScrollBar:
             self.printRow(self.pos)
 
     @keyhandler.register(ARROW_DOWN_KEY)
+    @keyhandler.register(VIM_DOWN_KEY)
     def moveDown(self):
         if self.pos == self.top + self.height - 1:
             if self.top + self.height == len(self.choices):
@@ -688,7 +694,7 @@ class ScrollBar:
 
 class SlidePrompt:
     def __init__(
-            self, 
+            self,
             components
         ):
         self.idx = 0
