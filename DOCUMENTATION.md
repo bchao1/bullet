@@ -27,9 +27,10 @@
         - [Using `VerticalPrompt` Object](#topic_14)
         - [Using `SlidePrompt` Object](#topic_15)
     - [Using `ScrollBar` Object](#topic_16)
-- More Customization: Extending Existing Prompts
-    - [Registering Keys and Overriding Methods](#topic_17)
-    - [Extending a Base Class](#topic_18)
+- [More Customization: Extending Existing Prompts](#topic_17)
+    - [A List of Default Keyboard Events](#topic_18)
+
+# General
 
 ## Using `bullet` Objects <a name="topic_1"></a>
 > Always create an UI object with a prompt specified.
@@ -107,6 +108,7 @@ from bullet import styles
 client = Bullet(**styles.Greece)
 ```
 
+# `bullet` Objects
 ## ⌨️ Using `Bullet` Object<a name="topic_7"></a>
 > Single-choice prompt.
 - Define `bullet` when initializing `Bullet` object.
@@ -177,3 +179,37 @@ result = cli.launch()
 - `up_indicator`, `down_indicator`: indicators shown in first and last row of the rendered items.
 - `height`: maximum items rendered on terminal.
     - For example, your can have 100 choices (`len(choices) = 100`) but define `height = 5`.
+
+# More Customization: Extending Existing Prompts<a name="topic_17"></a>
+> See `./examples/check.py` for the big picture of what's going on.
+
+In `bullet`, you can easily inherit a base class (existing `bullet` objects) and create your customized prompt. This is done by introducing the `keyhandler` module to register user-defined keyboard events.
+```python
+from bullet import keyhandler
+```
+Say you want the user to choose at least 1 and at most 3 items from a list of 5 items. You can inherit the `Check` class, and **register** a customized keyboard event as a method.
+```python
+@keyhandler.register(NEWLINE_KEY)
+def accept(self):
+    # do some validation checks: chosen items >= 1 and <= 3.
+```
+Note that `accept()` is the method for **all** prompts to return user input. The binded keyboard event by default is `NEWLINE_KEY` pressed.
+## A List of Default Keyboard Events<a name="topic_18"></a>
+> See `./bullet/charDef.py`
+- `LINE_BEGIN_KEY` : Ctrl + H
+- `LINE_END_KEY`: Ctrl + E 
+- `TAB_KEY`         
+- `NEWLINE_KEY`: Enter
+- `ESC_KEY`         
+- `BACK_SPACE_KEY` 
+- `ARROW_UP_KEY`    
+- `ARROW_DOWN_KEY`  
+- `ARROW_RIGHT_KEY`  
+- `ARROW_LEFT_KEY` 
+- `INSERT_KEY`     
+- `DELETE_KEY`   
+- `END_KEY`         
+- `PG_UP_KEY`      
+- `PG_DOWN_KEY`    
+- `SPACE_CHAR`
+- `INTERRUPT_KEY`: Ctrl + C
