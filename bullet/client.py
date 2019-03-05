@@ -112,7 +112,7 @@ class Bullet:
             self, 
             prompt: str               = "",
             choices: list             = [], 
-            default: list             = [],
+            default: int              = None,
             bullet: str               = "●", 
             bullet_color: str         = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
@@ -135,7 +135,10 @@ class Bullet:
 
         self.prompt = prompt
         self.choices = choices
+        if not 0 <= default < len(self.choices):
+            raise ValueError("Index must be in range [0, len(choices))!")
         self.default = default
+        
         self.pos = 0
 
         self.indent = indent
@@ -250,6 +253,9 @@ class Check:
 
         self.prompt = prompt
         self.choices = choices
+        if not all([0 <= i < len(self.choices) for i in default]):
+            raise ValueError("Indices must be in range [0, len(choices))!")
+        self.default = default
         self.checked = [False] * len(self.choices)
         self.pos = 0
 
@@ -356,6 +362,7 @@ class YesNo:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
         self.word_color = word_color
+        self.default = default
 
     def valid(self, ans):
         if ans.lower() not in ['y', 'n']:
@@ -371,6 +378,8 @@ class YesNo:
         utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
         while True:
             ans = my_input.input()
+            if ans == "":
+                return self.default
             if not self.valid(ans):
                 continue
             else:
@@ -390,6 +399,7 @@ class Input:
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
+        self.default = default
         self.word_color = word_color
         self.strip = strip
         self.pattern = pattern
@@ -411,6 +421,8 @@ class Input:
         else:
             while True:
                 result = sess.input()
+                if result == "":
+                    return self.default
                 if self.valid(result):
                     break
         return result.strip() if self.strip else result
@@ -439,6 +451,7 @@ class Numbers:
             self, 
             prompt, 
             indent = 0, 
+            default = None,
             word_color = colors.foreground["default"],
             type = float
         ):
@@ -448,6 +461,13 @@ class Numbers:
         self.prompt = prompt
         self.word_color = word_color
         self.type = type
+        if default:
+            try:
+                float(default)
+                return True
+            except:
+                raise ValueError("Default value should be a numeric value!")
+        self.default = default
     
     def valid(self, ans):
         try:
@@ -465,6 +485,8 @@ class Numbers:
         utils.forceWrite(' ' * self.indent + self.prompt)
         while True:
             ans = my_input.input()
+            if ans == "" and self.default:
+                return self.default
             if not self.valid(ans):
                 continue
             else:
@@ -500,8 +522,6 @@ class VerticalPrompt:
             else:
                 utils.cprint(self.separator * self.separator_len, color = self.separator_color)
         return self.result
-
-# Unfinished
 
 @keyhandler.init
 class ScrollBar:
