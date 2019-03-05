@@ -112,6 +112,7 @@ class Bullet:
             self, 
             prompt: str               = "",
             choices: list             = [], 
+            default: list             = [],
             bullet: str               = "●", 
             bullet_color: str         = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
@@ -134,6 +135,7 @@ class Bullet:
 
         self.prompt = prompt
         self.choices = choices
+        self.default = default
         self.pos = 0
 
         self.indent = indent
@@ -224,6 +226,7 @@ class Check:
             self, 
             prompt: str               = "",
             choices: list             = [], 
+            default: list             = [],
             check: str                = "√", 
             check_color: str          = colors.foreground["default"],
             check_on_switch: str      = colors.REVERSE,
@@ -345,6 +348,7 @@ class YesNo:
             self, 
             prompt, 
             indent = 0, 
+            default = 'y',
             word_color = colors.foreground["default"]
         ):
         self.indent = indent
@@ -377,6 +381,7 @@ class Input:
             self, 
             prompt, 
             indent = 0, 
+            default: str = "",
             word_color = colors.foreground["default"],
             strip = False,
             pattern = ""
