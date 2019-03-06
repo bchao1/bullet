@@ -112,7 +112,6 @@ class Bullet:
             self, 
             prompt: str               = "",
             choices: list             = [], 
-            default: int              = None,
             bullet: str               = "●", 
             bullet_color: str         = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
@@ -135,10 +134,6 @@ class Bullet:
 
         self.prompt = prompt
         self.choices = choices
-        if not 0 <= default < len(self.choices):
-            raise ValueError("Index must be in range [0, len(choices))!")
-        self.default = default
-        
         self.pos = 0
 
         self.indent = indent
@@ -211,12 +206,18 @@ class Bullet:
         utils.moveCursorDown(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
-    def launch(self):
+    def launch(self, default = None):
         if self.prompt:
             utils.forceWrite(' ' * self.indent + self.prompt + '\n')
             utils.forceWrite('\n' * self.shift)
+        if default is not None:
+            if type(default).__name__ != 'int':
+                raise TypeError("'default' should be an integer value!")
+            if not 0 <= int(default) < len(self.choices):
+                raise ValueError("'default' should be in range [0, len(choices))!")
+            self.pos = default
         self.renderBullets()
-        utils.moveCursorUp(len(self.choices))
+        utils.moveCursorUp(len(self.choices) - self.pos)
         cursor.hide_cursor()
         while True:
             ret = self.handle_input()
@@ -229,7 +230,6 @@ class Check:
             self, 
             prompt: str               = "",
             choices: list             = [], 
-            default: list             = [],
             check: str                = "√", 
             check_color: str          = colors.foreground["default"],
             check_on_switch: str      = colors.REVERSE,
@@ -253,9 +253,6 @@ class Check:
 
         self.prompt = prompt
         self.choices = choices
-        if not all([0 <= i < len(self.choices) for i in default]):
-            raise ValueError("Indices must be in range [0, len(choices))!")
-        self.default = default
         self.checked = [False] * len(self.choices)
         self.pos = 0
 
@@ -337,10 +334,19 @@ class Check:
         utils.moveCursorDown(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
-    def launch(self):
+    def launch(self, default = []):
         if self.prompt:
             utils.forceWrite(' ' * self.indent + self.prompt + '\n')
             utils.forceWrite('\n' * self.shift)
+        if default:
+            if not type(default).__name__ == 'list':
+                raise TypeError("`default` should be a list of integers!")
+            if not all([type(i).__name__ == 'int' for i in default]):
+                raise TypeError("Indices in `default` should be integer type!")
+            if not all([0 <= i < len(self.choices) for i in default]):
+                raise ValueError("All indices in `default` should be in range [0, len(choices))!")
+            for i in default:
+                self.checked[i] = True
         self.renderRows()
         utils.moveCursorUp(len(self.choices))
         cursor.hide_cursor()
@@ -353,8 +359,7 @@ class YesNo:
     def __init__(
             self, 
             prompt, 
-            indent = 0, 
-            default = 'y',
+            indent = 0,
             word_color = colors.foreground["default"]
         ):
         self.indent = indent
@@ -362,7 +367,6 @@ class YesNo:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
         self.word_color = word_color
-        self.default = default
 
     def valid(self, ans):
         if ans.lower() not in ['y', 'n']:
@@ -373,13 +377,16 @@ class YesNo:
             return False
         return True
         
-    def launch(self):
+    def launch(self, default = 'y'):
+        default = default.lower()
+        if not (default == 'y' or default == 'n'):
+            raise ValueError("`default` can only be 'y' or 'n'!")
         my_input = myInput(word_color = self.word_color)
         utils.forceWrite(' ' * self.indent + "[y/n] " + self.prompt)
         while True:
             ans = my_input.input()
             if ans == "":
-                return self.default
+                return True if ans.lower() == 'y' else False
             if not self.valid(ans):
                 continue
             else:
@@ -390,7 +397,6 @@ class Input:
             self, 
             prompt, 
             indent = 0, 
-            default: str = "",
             word_color = colors.foreground["default"],
             strip = False,
             pattern = ""
@@ -399,7 +405,6 @@ class Input:
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
-        self.default = default
         self.word_color = word_color
         self.strip = strip
         self.pattern = pattern
@@ -413,16 +418,25 @@ class Input:
             return False
         return True
 
-    def launch(self):
+    def launch(self, default = ""):
         utils.forceWrite(' ' * self.indent + self.prompt)
         sess = myInput(word_color = self.word_color)
         if not self.pattern:
-            result = sess.input()
-        else:
             while True:
                 result = sess.input()
                 if result == "":
-                    return self.default
+                    if default != "":
+                        return default
+                    else:
+                        utils.moveCursorUp(1)
+                        utils.forceWrite(' ' * self.indent + self.prompt)
+                        utils.forceWrite(' ' * len(result))
+                        utils.forceWrite('\b' * len(result))
+                else:
+                    break
+        else:
+            while True:
+                result = sess.input()
                 if self.valid(result):
                     break
         return result.strip() if self.strip else result
@@ -451,7 +465,6 @@ class Numbers:
             self, 
             prompt, 
             indent = 0, 
-            default = None,
             word_color = colors.foreground["default"],
             type = float
         ):
@@ -461,13 +474,6 @@ class Numbers:
         self.prompt = prompt
         self.word_color = word_color
         self.type = type
-        if default:
-            try:
-                float(default)
-                return True
-            except:
-                raise ValueError("Default value should be a numeric value!")
-        self.default = default
     
     def valid(self, ans):
         try:
@@ -480,13 +486,18 @@ class Numbers:
             utils.forceWrite('\b' * len(ans))
             return False
         
-    def launch(self):
+    def launch(self, default = None):
+        if default is not None:
+            try:
+                float(default)
+            except:
+                raise ValueError("`default` should be numeric value!")
         my_input = myInput(word_color = self.word_color)
         utils.forceWrite(' ' * self.indent + self.prompt)
         while True:
             ans = my_input.input()
-            if ans == "" and self.default:
-                return self.default
+            if ans == "" and default is not None:
+                return default
             if not self.valid(ans):
                 continue
             else:
