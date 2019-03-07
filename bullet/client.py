@@ -226,7 +226,7 @@ class Bullet:
 
 
 @keyhandler.init
-class BulletDict:
+class BulletDict(Bullet):
     def __init__(
             self, 
             prompt: str               = "",
@@ -270,12 +270,7 @@ class BulletDict:
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices.keys(), key = len)) + self.pad_right
-    
-    def renderBullets(self):
-        for i in range(len(self.choices)):
-            self.printBullet(i)
-            utils.forceWrite('\n')
-            
+
     def printBullet(self, idx):
         utils.forceWrite(' ' * (self.indent + self.align))
         back_color = self.background_on_switch if idx == self.pos else self.background_color
@@ -288,29 +283,7 @@ class BulletDict:
         utils.cprint(' ' * (self.max_width - len(list(self.choices.keys())[idx])), on = back_color, end = '')
         utils.moveCursorHead()
 
-    @keyhandler.register(ARROW_UP_KEY)
-    def moveUp(self):
-        if self.pos - 1 < 0:
-            return
-        else:
-            utils.clearLine()
-            old_pos = self.pos
-            self.pos -= 1
-            self.printBullet(old_pos)
-            utils.moveCursorUp(1)
-            self.printBullet(self.pos)
 
-    @keyhandler.register(ARROW_DOWN_KEY)
-    def moveDown(self):
-        if self.pos + 1 >= len(self.choices):
-            return
-        else:
-            utils.clearLine()
-            old_pos = self.pos
-            self.pos += 1
-            self.printBullet(old_pos)
-            utils.moveCursorDown(1)
-            self.printBullet(self.pos)
 
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
@@ -320,28 +293,6 @@ class BulletDict:
         self.pos = 0
         return ret
 
-    @keyhandler.register(INTERRUPT_KEY)
-    def interrupt(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
-        raise KeyboardInterrupt
-
-    def launch(self, default = None):
-        if self.prompt:
-            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
-            utils.forceWrite('\n' * self.shift)
-        if default is not None:
-            if type(default).__name__ != 'int':
-                raise TypeError("'default' should be an integer value!")
-            if not 0 <= int(default) < len(self.choices):
-                raise ValueError("'default' should be in range [0, len(choices))!")
-            self.pos = default
-        self.renderBullets()
-        utils.moveCursorUp(len(self.choices) - self.pos)
-        cursor.hide_cursor()
-        while True:
-            ret = self.handle_input()
-            if ret is not None:
-                return ret
 
 
 

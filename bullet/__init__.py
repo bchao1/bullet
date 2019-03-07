@@ -7,4 +7,4 @@ from .client import Numbers
 from .client import VerticalPrompt
 from .client import SlidePrompt
 from .client import ScrollBar
-from .client import BulletDic
+from .client import BulletDict

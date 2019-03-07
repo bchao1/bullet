@@ -1,7 +1,7 @@
-from bullet import BulletDic
+from bullet import BulletDict
 from bullet import colors
 
-cli = BulletDic(
+cli = BulletDict(
         prompt = "\nPlease choose a fruit: ",
         choices = {"apple":["me","lol"], "banana":1, "orange":2, "watermelon":3, "strawberry":4}, 
         indent = 0,
