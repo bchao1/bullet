@@ -224,6 +224,127 @@ class Bullet:
             if ret is not None:
                 return ret
 
+
+@keyhandler.init
+class BulletDict:
+    def __init__(
+            self, 
+            prompt: str               = "",
+            choices: dict             = {}, 
+            bullet: str               = "●", 
+            bullet_color: str         = colors.foreground["default"],
+            word_color: str           = colors.foreground["default"],
+            word_on_switch: str       = colors.REVERSE,
+            background_color: str     = colors.background["default"],
+            background_on_switch: str = colors.REVERSE,
+            pad_right                 = 0,
+            indent: int               = 0,
+            align                     = 0,
+            margin: int               = 0,
+            shift: int                = 0,
+        ):
+
+        if not choices:
+            raise ValueError("Choices can not be empty!")
+        if indent < 0:
+            raise ValueError("Indent must be > 0!")
+        if margin < 0:
+            raise ValueError("Margin must be > 0!")
+
+        self.prompt = prompt
+        self.choices = choices
+        self.pos = 0
+
+        self.indent = indent
+        self.align = align
+        self.margin = margin
+        self.shift = shift
+
+        self.bullet = bullet
+        self.bullet_color = bullet_color
+
+        self.word_color = word_color
+        self.word_on_switch = word_on_switch
+        self.background_color = background_color
+        self.background_on_switch = background_on_switch
+        self.pad_right = pad_right
+
+        self.max_width = len(max(self.choices.keys(), key = len)) + self.pad_right
+    
+    def renderBullets(self):
+        for i in range(len(self.choices)):
+            self.printBullet(i)
+            utils.forceWrite('\n')
+            
+    def printBullet(self, idx):
+        utils.forceWrite(' ' * (self.indent + self.align))
+        back_color = self.background_on_switch if idx == self.pos else self.background_color
+        word_color = self.word_on_switch if idx == self.pos else self.word_color
+        if idx == self.pos:
+            utils.cprint("{}".format(self.bullet) + " " * self.margin, self.bullet_color, back_color, end = '')
+        else:
+            utils.cprint(" " * (len(self.bullet) + self.margin), self.bullet_color, back_color, end = '')
+        utils.cprint(list(self.choices.keys())[idx], word_color, back_color, end = '')
+        utils.cprint(' ' * (self.max_width - len(list(self.choices.keys())[idx])), on = back_color, end = '')
+        utils.moveCursorHead()
+
+    @keyhandler.register(ARROW_UP_KEY)
+    def moveUp(self):
+        if self.pos - 1 < 0:
+            return
+        else:
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos -= 1
+            self.printBullet(old_pos)
+            utils.moveCursorUp(1)
+            self.printBullet(self.pos)
+
+    @keyhandler.register(ARROW_DOWN_KEY)
+    def moveDown(self):
+        if self.pos + 1 >= len(self.choices):
+            return
+        else:
+            utils.clearLine()
+            old_pos = self.pos
+            self.pos += 1
+            self.printBullet(old_pos)
+            utils.moveCursorDown(1)
+            self.printBullet(self.pos)
+
+    @keyhandler.register(NEWLINE_KEY)
+    def accept(self):
+        utils.moveCursorDown(len(self.choices) - self.pos)
+        cursor.show_cursor()
+        ret = self.choices[list(self.choices.keys())[self.pos]]
+        self.pos = 0
+        return ret
+
+    @keyhandler.register(INTERRUPT_KEY)
+    def interrupt(self):
+        utils.moveCursorDown(len(self.choices) - self.pos)
+        raise KeyboardInterrupt
+
+    def launch(self, default = None):
+        if self.prompt:
+            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
+            utils.forceWrite('\n' * self.shift)
+        if default is not None:
+            if type(default).__name__ != 'int':
+                raise TypeError("'default' should be an integer value!")
+            if not 0 <= int(default) < len(self.choices):
+                raise ValueError("'default' should be in range [0, len(choices))!")
+            self.pos = default
+        self.renderBullets()
+        utils.moveCursorUp(len(self.choices) - self.pos)
+        cursor.hide_cursor()
+        while True:
+            ret = self.handle_input()
+            if ret is not None:
+                return ret
+
+
+
 @keyhandler.init
 class Check:
     def __init__(
