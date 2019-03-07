@@ -370,14 +370,15 @@ class YesNo:
         self.word_color = word_color
 
     def valid(self, ans):
-        if ans.lower() not in ['y', 'n']:
-            utils.moveCursorUp(1)
-            utils.forceWrite(' ' * self.indent + self.prompt)
-            utils.forceWrite(' ' * len(ans))
-            utils.forceWrite('\b' * len(ans))
-            return False
-        return True
-        
+        ans = ans.lower()
+        if 'yes'.startswith(ans) or 'no'.startswith(ans):
+            return True
+        utils.moveCursorUp(1)
+        utils.forceWrite(' ' * self.indent + self.prompt)
+        utils.forceWrite(' ' * len(ans))
+        utils.forceWrite('\b' * len(ans))
+        return False
+
     def launch(self, default = 'y'):
         default = default.lower()
         if not (default == 'y' or default == 'n'):
@@ -391,7 +392,7 @@ class YesNo:
             if not self.valid(ans):
                 continue
             else:
-                return True if ans.lower() == 'y' else False
+                return 'yes'.startswith(ans.lower())
 
 class Input:
     def __init__(
