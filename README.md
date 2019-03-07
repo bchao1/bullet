@@ -83,6 +83,12 @@ $ git clone https://github.com/Mckinsey666/bullet.git
 $ cd bullet
 $ pip install .
 ```
+> With Docker
+```shell
+$ git clone https://github.com/Mckinsey666/bullet.git
+$ cd bullet
+$ docker run -it --rm -v $PWD/examples:/usr/src/app Mckinsey666/bullet python colorful.py
+```
 ## Documentation
 📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
 
