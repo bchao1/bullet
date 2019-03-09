@@ -131,16 +131,24 @@ class Bullet:
             raise ValueError("Indent must be > 0!")
         if margin < 0:
             raise ValueError("Margin must be > 0!")
-
+        
         self.prompt = prompt
-        self.choices = choices
+        
+        #test flag also return objects
+        self.objects=[]
+        if(type(choices) is dict):
+            self.choices = list(choices.keys())
+            self.objects=[choices[x] for x in self.choices]
+        else:
+            self.choices = choices
+        
         self.pos = 0
 
         self.indent = indent
         self.align = align
         self.margin = margin
         self.shift = shift
-
+        
         self.bullet = bullet
         self.bullet_color = bullet_color
 
@@ -197,7 +205,11 @@ class Bullet:
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
         cursor.show_cursor()
-        ret = self.choices[self.pos]
+        #flag check and return ether objects or just choices
+        if(self.objects):
+            ret=self.objects[self.pos]
+        else:
+            ret = self.choices[self.pos]
         self.pos = 0
         return ret
 
