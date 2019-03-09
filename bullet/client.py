@@ -131,16 +131,24 @@ class Bullet:
             raise ValueError("Indent must be > 0!")
         if margin < 0:
             raise ValueError("Margin must be > 0!")
-
+        
         self.prompt = prompt
-        self.choices = choices
+        
+        #test flag also return objects
+        self.objects=[]
+        if(type(choices) is dict):
+            self.choices = list(choices.keys())
+            self.objects=[choices[x] for x in self.choices]
+        else:
+            self.choices = choices
+        
         self.pos = 0
 
         self.indent = indent
         self.align = align
         self.margin = margin
         self.shift = shift
-
+        
         self.bullet = bullet
         self.bullet_color = bullet_color
 
@@ -197,7 +205,11 @@ class Bullet:
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
         cursor.show_cursor()
-        ret = self.choices[self.pos]
+        #flag check and return ether objects or just choices
+        if(self.objects):
+            ret=self.objects[self.pos]
+        else:
+            ret = self.choices[self.pos]
         self.pos = 0
         return ret
 
@@ -223,75 +235,6 @@ class Bullet:
             ret = self.handle_input()
             if ret is not None:
                 return ret
-
-
-@keyhandler.init
-class BulletDict(Bullet):
-    def __init__(
-            self, 
-            prompt: str               = "",
-            choices: dict             = {}, 
-            bullet: str               = "●", 
-            bullet_color: str         = colors.foreground["default"],
-            word_color: str           = colors.foreground["default"],
-            word_on_switch: str       = colors.REVERSE,
-            background_color: str     = colors.background["default"],
-            background_on_switch: str = colors.REVERSE,
-            pad_right                 = 0,
-            indent: int               = 0,
-            align                     = 0,
-            margin: int               = 0,
-            shift: int                = 0,
-        ):
-
-        if not choices:
-            raise ValueError("Choices can not be empty!")
-        if indent < 0:
-            raise ValueError("Indent must be > 0!")
-        if margin < 0:
-            raise ValueError("Margin must be > 0!")
-
-        self.prompt = prompt
-        self.choices = choices
-        self.pos = 0
-
-        self.indent = indent
-        self.align = align
-        self.margin = margin
-        self.shift = shift
-
-        self.bullet = bullet
-        self.bullet_color = bullet_color
-
-        self.word_color = word_color
-        self.word_on_switch = word_on_switch
-        self.background_color = background_color
-        self.background_on_switch = background_on_switch
-        self.pad_right = pad_right
-
-        self.max_width = len(max(self.choices.keys(), key = len)) + self.pad_right
-
-    def printBullet(self, idx):
-        utils.forceWrite(' ' * (self.indent + self.align))
-        back_color = self.background_on_switch if idx == self.pos else self.background_color
-        word_color = self.word_on_switch if idx == self.pos else self.word_color
-        if idx == self.pos:
-            utils.cprint("{}".format(self.bullet) + " " * self.margin, self.bullet_color, back_color, end = '')
-        else:
-            utils.cprint(" " * (len(self.bullet) + self.margin), self.bullet_color, back_color, end = '')
-        utils.cprint(list(self.choices.keys())[idx], word_color, back_color, end = '')
-        utils.cprint(' ' * (self.max_width - len(list(self.choices.keys())[idx])), on = back_color, end = '')
-        utils.moveCursorHead()
-
-
-
-    @keyhandler.register(NEWLINE_KEY)
-    def accept(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
-        cursor.show_cursor()
-        ret = self.choices[list(self.choices.keys())[self.pos]]
-        self.pos = 0
-        return ret
 
 
 
