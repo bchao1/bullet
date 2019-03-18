@@ -1,6 +1,6 @@
 # `bullet` : Documentation
 <p align=center>
-<img src="./assets/list.png" width="400"/>
+<img src="./assets/icon.png" width="400"/>
 <br>
 
 ***
