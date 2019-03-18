@@ -1,7 +1,9 @@
 # `bullet` : Documentation
 <p align=center>
+<br><br><br>
 <img src="./assets/icon.png" width="400"/>
-<br>
+<br><br><br>
+</p>
 
 ***
 > 👷 To fully customize your prompts, you'll have to take total control of formatting and colors. Here's what you need to know.
