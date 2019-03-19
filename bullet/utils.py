@@ -5,7 +5,11 @@ import string
 from .charDef import *
 from . import colors
 
-_, n = os.popen('stty size', 'r').read().split()
+try:
+    _, n = os.popen('stty size', 'r').read().split()
+except ValueError:
+    # Default values
+    _, n = (80, 25)
 COLUMNS = int(n)  ## Size of console
 
 def mygetc():
