@@ -6,7 +6,7 @@ import shutil
 from .charDef import *
 from . import colors
 
-_, COLUMNS = shutil.get_terminal_size()  ## Size of console
+COLUMNS, _ = shutil.get_terminal_size()  ## Size of console
 
 def mygetc():
     ''' Get raw characters from input. '''
