@@ -2,14 +2,12 @@ import os
 import sys
 import tty, termios
 import string
+import shutil
 from .charDef import *
 from . import colors
 
-try:
-    _, n = os.popen('stty size', 'r').read().split()
-except ValueError:
-    # Default values
-    _, n = (80, 25)
+_, n = shutil.get_terminal_size()
+
 COLUMNS = int(n)  ## Size of console
 
 def mygetc():
