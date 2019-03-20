@@ -2,11 +2,11 @@ import os
 import sys
 import tty, termios
 import string
+import shutil
 from .charDef import *
 from . import colors
 
-_, n = os.popen('stty size', 'r').read().split()
-COLUMNS = int(n)  ## Size of console
+COLUMNS, _ = shutil.get_terminal_size()  ## Size of console
 
 def mygetc():
     ''' Get raw characters from input. '''
