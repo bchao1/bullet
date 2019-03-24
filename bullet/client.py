@@ -196,7 +196,6 @@ class Bullet:
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
-        cursor.show_cursor()
         ret = self.choices[self.pos]
         self.pos = 0
         return ret
@@ -218,11 +217,11 @@ class Bullet:
             self.pos = default
         self.renderBullets()
         utils.moveCursorUp(len(self.choices) - self.pos)
-        cursor.hide_cursor()
-        while True:
-            ret = self.handle_input()
-            if ret is not None:
-                return ret
+        with cursor.hide():
+            while True:
+                ret = self.handle_input()
+                if ret is not None:
+                    return ret
 
 @keyhandler.init
 class Check:
@@ -323,7 +322,6 @@ class Check:
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
-        cursor.show_cursor()
         ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
         self.pos = 0
         self.checked = [False] * len(self.choices)
@@ -349,11 +347,11 @@ class Check:
                 self.checked[i] = True
         self.renderRows()
         utils.moveCursorUp(len(self.choices))
-        cursor.hide_cursor()
-        while True:
-            ret = self.handle_input()
-            if ret is not None:
-                return ret
+        with cursor.hide():
+            while True:
+                ret = self.handle_input()
+                if ret is not None:
+                    return ret
 
 class YesNo:
     def __init__(
@@ -665,7 +663,6 @@ class ScrollBar:
     def accept(self):
         d = self.top + self.height - self.pos
         utils.moveCursorDown(d)
-        cursor.show_cursor()
         ret = self.choices[self.pos]
         self.pos = 0
         return ret
@@ -682,11 +679,11 @@ class ScrollBar:
             utils.forceWrite('\n' * self.shift)
         self.renderRows()
         utils.moveCursorUp(self.height)
-        cursor.hide_cursor()
-        while True:
-            ret = self.handle_input()
-            if ret is not None:
-                return ret
+        with cursor.hide():
+            while True:
+                ret = self.handle_input()
+                if ret is not None:
+                    return ret
 
 class SlidePrompt:
     def __init__(
