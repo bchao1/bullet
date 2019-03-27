@@ -430,7 +430,7 @@ class Input:
                 result = sess.input()
                 if result == "":
                     if self.default != "":
-                        return self.default
+                        return self.default[1:-1]
                     else:
                         utils.moveCursorUp(1)
                         utils.forceWrite(' ' * self.indent + self.prompt + self.default)

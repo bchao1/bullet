@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 from bullet import Bullet, SlidePrompt, Check, Input, YesNo, Numbers
 from bullet import styles
 from bullet import colors
@@ -8,6 +10,8 @@ cli = SlidePrompt(
             word_color = colors.foreground["yellow"]),
         Input("Who are you? ",
             default = "Batman",
+            word_color = colors.foreground["yellow"]),
+        Input("Really? ",
             word_color = colors.foreground["yellow"]),
         Numbers("How old are you? ", 
             word_color = colors.foreground["yellow"], 
