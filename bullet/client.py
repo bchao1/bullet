@@ -361,7 +361,7 @@ class YesNo:
             prompt,
             indent = 0,
             word_color = colors.foreground["default"],
-            prompt_prefix = '[y/n] '
+            prompt_prefix = "[y/n] "
         ):
         self.indent = indent
         if not prompt:
@@ -371,7 +371,7 @@ class YesNo:
 
     def valid(self, ans):
         ans = ans.lower()
-        if 'yes'.startswith(ans) or 'no'.startswith(ans):
+        if "yes".startswith(ans) or "no".startswith(ans):
             return True
         utils.moveCursorUp(1)
         utils.forceWrite(' ' * self.indent + self.prompt)
@@ -379,9 +379,9 @@ class YesNo:
         utils.forceWrite('\b' * len(ans))
         return False
 
-    def launch(self, default = 'y'):
+    def launch(self, default = "y"):
         default = default.lower()
-        if not (default == 'y' or default == 'n'):
+        if not (default == "y" or default == "n"):
             raise ValueError("`default` can only be 'y' or 'n'!")
         my_input = myInput(word_color = self.word_color)
         utils.forceWrite(' ' * self.indent + self.prompt)
@@ -397,7 +397,8 @@ class YesNo:
 class Input:
     def __init__(
             self, 
-            prompt, 
+            prompt,
+            default = "",
             indent = 0, 
             word_color = colors.foreground["default"],
             strip = False,
@@ -406,6 +407,7 @@ class Input:
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
+        self.default = "[{}]".format(default) if default else ""
         self.prompt = prompt
         self.word_color = word_color
         self.strip = strip
@@ -414,24 +416,24 @@ class Input:
     def valid(self, ans):
         if not bool(re.match(self.pattern, ans)):
             utils.moveCursorUp(1)
-            utils.forceWrite(' ' * self.indent + self.prompt)
+            utils.forceWrite(' ' * self.indent + self.prompt + self.default)
             utils.forceWrite(' ' * len(ans))
             utils.forceWrite('\b' * len(ans))
             return False
         return True
 
-    def launch(self, default = ""):
-        utils.forceWrite(' ' * self.indent + self.prompt)
+    def launch(self):
+        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
         sess = myInput(word_color = self.word_color)
         if not self.pattern:
             while True:
                 result = sess.input()
                 if result == "":
-                    if default != "":
-                        return default
+                    if self.default != "":
+                        return self.default
                     else:
                         utils.moveCursorUp(1)
-                        utils.forceWrite(' ' * self.indent + self.prompt)
+                        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
                         utils.forceWrite(' ' * len(result))
                         utils.forceWrite('\b' * len(result))
                 else:

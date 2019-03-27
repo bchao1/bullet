@@ -6,7 +6,8 @@ cli = SlidePrompt(
     [
         YesNo("Are you a student? ", 
             word_color = colors.foreground["yellow"]),
-        Input("Who are you? ", 
+        Input("Who are you? ",
+            default = "Batman",
             word_color = colors.foreground["yellow"]),
         Numbers("How old are you? ", 
             word_color = colors.foreground["yellow"], 
