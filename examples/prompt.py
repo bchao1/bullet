@@ -1,5 +1,3 @@
-import sys
-sys.path.append('../')
 from bullet import Bullet, SlidePrompt, Check, Input, YesNo, Numbers
 from bullet import styles
 from bullet import colors
