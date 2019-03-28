@@ -1,5 +1,6 @@
 import sys
 import os
+from contextlib import contextmanager
 
 # Show and hide cursors
 
@@ -11,7 +12,15 @@ if os.name == 'nt':
         _fields_ = [("size", ctypes.c_int),
                     ("visible", ctypes.c_byte)]
 
-def hide_cursor():
+@contextmanager
+def hide():
+    try:
+        _hide_cursor()
+        yield
+    finally:
+        _show_cursor()
+
+def _hide_cursor():
     if os.name == 'nt':
         ci = _CursorInfo()
         handle = ctypes.windll.kernel32.GetStdHandle(-11)
@@ -22,7 +31,7 @@ def hide_cursor():
         sys.stdout.write("\033[?25l")
         sys.stdout.flush()
 
-def show_cursor():
+def _show_cursor():
     if os.name == 'nt':
         ci = _CursorInfo()
         handle = ctypes.windll.kernel32.GetStdHandle(-11)
