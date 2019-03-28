@@ -334,10 +334,12 @@ class Check:
         utils.moveCursorDown(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
-    def launch(self, default = []):
+    def launch(self, default = None):
         if self.prompt:
             utils.forceWrite(' ' * self.indent + self.prompt + '\n')
             utils.forceWrite('\n' * self.shift)
+        if default is None:
+            default = []
         if default:
             if not type(default).__name__ == 'list':
                 raise TypeError("`default` should be a list of integers!")
