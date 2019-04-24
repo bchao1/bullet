@@ -1,11 +1,14 @@
 import sys
-from .charDef import *
 from . import colors
 from . import utils
 from . import cursor
 from . import keyhandler
-import readline
 import re
+
+if sys.platform == 'win32':
+    from .winCharDef import *
+else:
+    from .charDef import *
 
 # Reusable private utility class
 class myInput:
