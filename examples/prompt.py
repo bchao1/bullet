@@ -4,7 +4,10 @@ from bullet import colors
 
 cli = SlidePrompt(
     [
-        YesNo("Are you a student? ", 
+        YesNo("Are you a student? ",
+            word_color = colors.foreground["yellow"]),
+        YesNo("Are you a good student? ",
+            default = 'y',
             word_color = colors.foreground["yellow"]),
         Input("Who are you? ",
             default = "Batman",
