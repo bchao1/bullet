@@ -1,5 +1,4 @@
 from bullet import Bullet
-from bullet import colors
 
 cli = Bullet(
         prompt = "\nPlease choose a fruit: ",
