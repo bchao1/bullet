@@ -93,3 +93,4 @@ $ pip install .
 
 ## Todo
 - Windows Support
+- Search bar with autocomplete
