@@ -606,8 +606,9 @@ class ScrollBar:
             self.printRow(i)
             utils.forceWrite('\n')
 
-        self.printRow(i + 1, indicator= self.down_indicator if self.top + self.height != len(self.choices) else '')
-        utils.forceWrite('\n')
+        if i < len(self.choices) - 1:
+            self.printRow(i + 1, indicator= self.down_indicator if self.top + self.height != len(self.choices) else '')
+            utils.forceWrite('\n')
             
     def printRow(self, idx, indicator=''):
         utils.forceWrite(' ' * (self.indent + self.align))
