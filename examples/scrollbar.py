@@ -9,11 +9,8 @@ cli = ScrollBar(
     align = 5,
     margin = 3,
     pointer = "👉",
-    pointer_color=colors.foreground["cyan"],
-    word_color = colors.foreground["white"],
-    word_on_switch=colors.foreground["white"],
-    background_color=colors.background["black"],
-    background_on_switch=colors.background["black"]
+    background_on_switch = colors.background['default'],
+    word_on_switch = colors.foreground['default']
 )
 print('\n')
 result = cli.launch()
