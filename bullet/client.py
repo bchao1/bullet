@@ -359,13 +359,17 @@ class YesNo:
     def __init__(
             self,
             prompt,
-            indent = 0,
-            word_color = colors.foreground["default"],
-            prompt_prefix = "[y/n] "
+            default="y",
+            indent=0,
+            word_color=colors.foreground["default"],
+            prompt_prefix="[y/n] "
         ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
+        if default.lower() not in ["y", "n"]:
+            raise ValueError("`default` can only be 'y' or 'n'!")
+        self.default = "[{}]".format(default.lower())
         self.prompt = prompt_prefix + prompt
         self.word_color = word_color
 
@@ -374,21 +378,18 @@ class YesNo:
         if "yes".startswith(ans) or "no".startswith(ans):
             return True
         utils.moveCursorUp(1)
-        utils.forceWrite(' ' * self.indent + self.prompt)
+        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
         utils.forceWrite(' ' * len(ans))
         utils.forceWrite('\b' * len(ans))
         return False
 
-    def launch(self, default = "y"):
-        default = default.lower()
-        if not (default == "y" or default == "n"):
-            raise ValueError("`default` can only be 'y' or 'n'!")
+    def launch(self):
         my_input = myInput(word_color = self.word_color)
-        utils.forceWrite(' ' * self.indent + self.prompt)
+        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
         while True:
             ans = my_input.input()
             if ans == "":
-                return default == 'y'
+                return self.default.strip('[]') == 'y'
             if not self.valid(ans):
                 continue
             else:
