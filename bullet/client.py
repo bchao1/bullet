@@ -374,7 +374,11 @@ class YesNo:
         self.word_color = word_color
 
     def valid(self, ans):
-        ans = ans.lower()
+        try:
+            ans = ans.lower()
+        except AttributeError:
+            return False
+
         if "yes".startswith(ans) or "no".startswith(ans):
             return True
         utils.moveCursorUp(1)
