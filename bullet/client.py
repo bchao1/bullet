@@ -171,27 +171,31 @@ class Bullet:
 
     @keyhandler.register(ARROW_UP_KEY)
     def moveUp(self):
+        utils.clearLine()
+        old_pos = self.pos
         if self.pos - 1 < 0:
-            return
+            self.pos = len(self.choices) - 1
+            self.printBullet(old_pos)
+            utils.moveCursorDown(len(self.choices) - 1)
         else:
-            utils.clearLine()
-            old_pos = self.pos
             self.pos -= 1
             self.printBullet(old_pos)
             utils.moveCursorUp(1)
-            self.printBullet(self.pos)
+        self.printBullet(self.pos)
 
     @keyhandler.register(ARROW_DOWN_KEY)
     def moveDown(self):
+        utils.clearLine()
+        old_pos = self.pos
         if self.pos + 1 >= len(self.choices):
-            return
+            self.pos = 0
+            self.printBullet(old_pos)
+            utils.moveCursorUp(len(self.choices) - 1)
         else:
-            utils.clearLine()
-            old_pos = self.pos
             self.pos += 1
             self.printBullet(old_pos)
             utils.moveCursorDown(1)
-            self.printBullet(self.pos)
+        self.printBullet(self.pos)
 
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
