@@ -89,7 +89,7 @@ class myInput:
                  i == PG_DOWN_KEY    or \
                  i == TAB_KEY        or \
                  i == UNDEFINED_KEY:
-                return
+                return i
             elif i == BACK_SPACE_KEY:
                 if self.moveCursor(self.pos - 1):
                     self.deleteChar()
@@ -442,7 +442,7 @@ class Input:
                         utils.forceWrite(' ' * len(result))
                         utils.forceWrite('\b' * len(result))
                 else:
-                    break
+                    return result
         else:
             while True:
                 result = sess.input()
