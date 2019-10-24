@@ -29,7 +29,7 @@ if sys.platform == 'win32':
         if ord(c) in nonesc_characters:
             return c
 
-        elif ord(c) == ESC_CODE:
+        elif ord(c) == ESC_KEY:
             combo = mygetc()
             if ord(combo) in [
                 ARROW_UP_KEY,
@@ -74,7 +74,7 @@ else:
         elif ord(c) == BACK_SPACE_KEY:
             return c
 
-        elif ord(c) == ESC_CODE:
+        elif ord(c) == ESC_KEY:
             combo = mygetc()
             if ord(combo) == MOD_KEY_INT:
                 key = mygetc()
