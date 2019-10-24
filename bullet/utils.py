@@ -1,60 +1,101 @@
-import os
-import sys
-import tty, termios
-import string
 import shutil
-from .charDef import *
+import string
+import sys
 from . import colors
 
 COLUMNS, _ = shutil.get_terminal_size()  ## Size of console
 
-def mygetc():
-    ''' Get raw characters from input. '''
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(fd)
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
+if sys.platform == 'win32':
+    import colorama
+    from .winCharDef import *
+    import msvcrt
 
-def getchar():
-    ''' Character input parser. '''
-    c = mygetc()
-    if ord(c) == LINE_BEGIN_KEY or \
-       ord(c) == LINE_END_KEY   or \
-       ord(c) == TAB_KEY        or \
-       ord(c) == INTERRUPT_KEY  or \
-       ord(c) == NEWLINE_KEY:
-       return c
-    
-    elif ord(c) == BACK_SPACE_KEY:
+    colorama.init()
+
+
+    def mygetc():
+        '''Gets raw characters from input on Windows'''
+        c = msvcrt.getch()
+        c = c.decode('mbcs')
+
         return c
-    
-    elif ord(c) == ESC_KEY:
-        combo = mygetc()
-        if ord(combo) == MOD_KEY_INT:
-            key = mygetc()
-            if ord(key) >= MOD_KEY_BEGIN - MOD_KEY_FLAG and ord(key) <= MOD_KEY_END - MOD_KEY_FLAG:
-                if ord(mygetc()) == MOD_KEY_DUMMY:
-                    return chr(ord(key) + MOD_KEY_FLAG)
-                else:
-                    return UNDEFINED_KEY
-            elif ord(key) >= ARROW_KEY_BEGIN - ARROW_KEY_FLAG and ord(key) <= ARROW_KEY_END - ARROW_KEY_FLAG:
-                return chr(ord(key) + ARROW_KEY_FLAG)
+
+
+    def getchar():
+        '''Parses input on Windows'''
+        c = mygetc()
+        nonesc_characters = [LINE_BEGIN_KEY, LINE_END_KEY, TAB_KEY,
+                             INTERRUPT_KEY, NEWLINE_KEY, BACK_SPACE_KEY]
+        if ord(c) in nonesc_characters:
+            return c
+
+        elif ord(c) == ESC_CODE:
+            combo = mygetc()
+            if ord(combo) in [
+                ARROW_UP_KEY,
+                ARROW_DOWN_KEY,
+                ARROW_LEFT_KEY,
+                ARROW_RIGHT_KEY,
+            ]:
+                return combo
+        else:
+            if c in string.printable:
+                return c
             else:
                 return UNDEFINED_KEY
-        else:
-            return getchar()
 
-    else:
-        if c in string.printable:
+else:
+    import tty, termios
+    from .charDef import *
+
+
+    def mygetc():
+        ''' Get raw characters from input. '''
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+
+
+    def getchar():
+        ''' Character input parser. '''
+        c = mygetc()
+        if ord(c) == LINE_BEGIN_KEY or \
+                ord(c) == LINE_END_KEY or \
+                ord(c) == TAB_KEY or \
+                ord(c) == INTERRUPT_KEY or \
+                ord(c) == NEWLINE_KEY:
             return c
-        else:
-            return UNDEFINED_KEY
 
-    return UNDEFINED_KEY
+        elif ord(c) == BACK_SPACE_KEY:
+            return c
+
+        elif ord(c) == ESC_CODE:
+            combo = mygetc()
+            if ord(combo) == MOD_KEY_INT:
+                key = mygetc()
+                if ord(key) >= MOD_KEY_BEGIN - MOD_KEY_FLAG and ord(key) <= MOD_KEY_END - MOD_KEY_FLAG:
+                    if ord(mygetc()) == MOD_KEY_DUMMY:
+                        return chr(ord(key) + MOD_KEY_FLAG)
+                    else:
+                        return UNDEFINED_KEY
+                elif ord(key) >= ARROW_KEY_BEGIN - ARROW_KEY_FLAG and ord(key) <= ARROW_KEY_END - ARROW_KEY_FLAG:
+                    return chr(ord(key) + ARROW_KEY_FLAG)
+                else:
+                    return UNDEFINED_KEY
+            else:
+                return getchar()
+
+        else:
+            if c in string.printable:
+                return c
+            else:
+                return UNDEFINED_KEY
+
 
 # Basic command line functions
 

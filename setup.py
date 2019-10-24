@@ -11,4 +11,9 @@ setup(
       author='Mckinsey666',
       license='MIT',
       packages=find_packages(),
-      )
+      extras_require={
+            ":sys_platform=='win32'": [
+                  'colorama>=0.4.0, <=0.4.1'
+            ]
+      }
+)
