@@ -197,7 +197,6 @@ class Bullet:
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
         ret = self.choices[self.pos]
-        self.pos = 0
         return ret
 
     @keyhandler.register(INTERRUPT_KEY)
@@ -205,7 +204,7 @@ class Bullet:
         utils.moveCursorDown(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
-    def launch(self, default = None):
+    def launch(self, default = None, return_index=False):
         if self.prompt:
             utils.forceWrite(' ' * self.indent + self.prompt + '\n')
             utils.forceWrite('\n' * self.shift)
@@ -221,7 +220,13 @@ class Bullet:
             while True:
                 ret = self.handle_input()
                 if ret is not None:
-                    return ret
+                    if return_index:
+                        return_value = self.pos
+                        self.pos = 0
+                        return return_value
+                    else:
+                        self.pos = 0
+                        return ret
 
 @keyhandler.init
 class Check:
