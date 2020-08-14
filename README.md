@@ -19,13 +19,8 @@
 
 > See the sample code for the above demo in `./examples/prompt.py`.
 
-## ✨ New Feature: `ScrollBar`
-
-<p align="center">
-    <img src="./assets/gifs/scrollbar.gif" width=400>
-</p>
-
-> See the sample code for the above demo in `./examples/scrollbar.py`.
+## ✨News
+- `bullet==2.2.0` is up! (Finally!)
 
 ## Bullet-lists and checkboxes
 > 🎨 Robust support for user-defined styles.
@@ -62,6 +57,14 @@
     </tr>
 </table>
 
+## ScrollBar
+
+<p align="center">
+    <img src="./assets/gifs/scrollbar.gif" width=400>
+</p>
+
+> See the sample code for the above demo in `./examples/scrollbar.py`.
+
 ## Other input prompts
 > ⛔ Passwords
 <img src="./assets/gifs/password.gif" width="600"/>
@@ -79,7 +82,7 @@ $ pip install bullet
 ```
 > Build from Source
 ```shell
-$ git clone https://github.com/Mckinsey666/bullet.git
+$ git clone https://github.com/bchao1/bullet.git
 $ cd bullet
 $ pip install .
 ```
