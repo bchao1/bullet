@@ -21,8 +21,9 @@ client = MinMaxCheck(
     prompt = "Choose 2 or 3 from the list: ",
     min_selections = 2,
     max_selections = 3,
+    return_index = True,
     **styles.Example,
-    **styles.Exam
+    **styles.Exam,
 )
 print('\n', end = '')
 result = client.launch()

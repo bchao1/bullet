@@ -123,6 +123,7 @@ class Bullet:
             align                     = 0,
             margin: int               = 0,
             shift: int                = 0,
+            return_index: bool        = False
         ):
 
         if not choices:
@@ -151,6 +152,7 @@ class Bullet:
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
+        self.return_index = return_index
     
     def renderBullets(self):
         for i in range(len(self.choices)):
@@ -197,6 +199,8 @@ class Bullet:
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
         ret = self.choices[self.pos]
+        if self.return_index:
+            return ret, self.pos
         self.pos = 0
         return ret
 
@@ -241,6 +245,7 @@ class Check:
             align                     = 0,
             margin: int               = 0,
             shift: int                = 0,
+            return_index: bool        = False
         ):
 
         if not choices:
@@ -271,6 +276,7 @@ class Check:
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key = len)) + self.pad_right
+        self.return_index = return_index
     
     def renderRows(self):
         for i in range(len(self.choices)):
@@ -323,8 +329,11 @@ class Check:
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
         ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
+        ret_idx = [i for i in range(len(self.choices)) if self.checked[i]]
         self.pos = 0
         self.checked = [False] * len(self.choices)
+        if self.return_index:
+            return ret, ret_idx
         return ret
 
     @keyhandler.register(INTERRUPT_KEY)

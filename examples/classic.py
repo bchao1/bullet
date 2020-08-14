@@ -8,7 +8,8 @@ cli = Bullet(
         margin = 2,
         shift = 0,
         bullet = "",
-        pad_right = 5
+        pad_right = 5,
+        return_index = True
     )
 
 result = cli.launch()
