@@ -570,7 +570,8 @@ class ScrollBar:
             align                     = 0,
             margin: int               = 0,
             shift: int                = 0,
-            height                    = None
+            height                    = None,
+            return_index: bool        = False
         ):
 
         if not choices:
@@ -608,6 +609,8 @@ class ScrollBar:
         # scrollbar won't move if pos is in range [top, top + height)
         # scrollbar moves up if pos < top
         # scrollbar moves down if pos > top + height - 1
+
+        self.return_index = return_index
     
     def renderRows(self):
         self.printRow(self.top, indicator = self.up_indicator if self.top != 0 else '')
@@ -681,6 +684,8 @@ class ScrollBar:
         d = self.top + self.height - self.pos
         utils.moveCursorDown(d)
         ret = self.choices[self.pos]
+        if self.return_index:
+            return ret, self.pos
         self.pos = 0
         return ret
 
