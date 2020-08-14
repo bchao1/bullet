@@ -5,7 +5,9 @@ __pycache__/
 /bullet/__pycache__/
 # C extensions
 *.so
-
+.DS_Store
+# Tests 
+tests/
 # Distribution / packaging
 .Python
 build/
@@ -115,3 +117,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#
+test.py
