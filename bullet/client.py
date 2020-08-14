@@ -388,6 +388,8 @@ class YesNo:
         utils.forceWrite(' ' * self.indent + self.prompt + self.default)
         while True:
             ans = my_input.input()
+            if ans is None:
+                continue
             if ans == "":
                 return self.default.strip('[]') == 'y'
             if not self.valid(ans):
