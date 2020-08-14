@@ -482,7 +482,7 @@ class Numbers:
     
     def valid(self, ans):
         try:
-            float(ans)
+            self.type(ans)
             return True
         except:
             utils.moveCursorUp(1)
@@ -494,9 +494,9 @@ class Numbers:
     def launch(self, default = None):
         if default is not None:
             try:
-                float(default)
+                self.type(default)
             except:
-                raise ValueError("`default` should be numeric value!")
+                raise ValueError("`default` should be a " + str(self.type))
         my_input = myInput(word_color = self.word_color)
         utils.forceWrite(' ' * self.indent + self.prompt)
         while True:
