@@ -374,6 +374,8 @@ class YesNo:
         self.word_color = word_color
 
     def valid(self, ans):
+        if ans is None:
+            return False
         ans = ans.lower()
         if "yes".startswith(ans) or "no".startswith(ans):
             return True
@@ -388,8 +390,6 @@ class YesNo:
         utils.forceWrite(' ' * self.indent + self.prompt + self.default)
         while True:
             ans = my_input.input()
-            if ans is None:
-                continue
             if ans == "":
                 return self.default.strip('[]') == 'y'
             if not self.valid(ans):
