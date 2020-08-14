@@ -19,8 +19,9 @@
 
 > See the sample code for the above demo in `./examples/prompt.py`.
 
-## ✨News
-- `bullet==2.2.0` is up! (Finally!)
+## ✨News: `bullet==2.2.0` is up (Finally!)
+
+You can now download the newest version of bullet on PyPI!
 
 ## Bullet-lists and checkboxes
 > 🎨 Robust support for user-defined styles.
