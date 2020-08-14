@@ -7,7 +7,7 @@ cli = ScrollBar(
     emojis.feelings,
     height = 5,
     align = 5,
-    margin = 3,
+    margin = 0,
     pointer = "👉",
     background_on_switch = colors.background['default'],
     word_on_switch = colors.foreground['default']
