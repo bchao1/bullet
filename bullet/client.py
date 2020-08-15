@@ -1,11 +1,14 @@
 import sys
-from .charDef import *
 from . import colors
 from . import utils
 from . import cursor
 from . import keyhandler
-import readline
 import re
+
+if sys.platform == 'win32':
+    from .winCharDef import *
+else:
+    from .charDef import *
 
 # Reusable private utility class
 class myInput:
@@ -89,7 +92,7 @@ class myInput:
                  i == PG_DOWN_KEY    or \
                  i == TAB_KEY        or \
                  i == UNDEFINED_KEY:
-                return
+                return i
             elif i == BACK_SPACE_KEY:
                 if self.moveCursor(self.pos - 1):
                     self.deleteChar()
@@ -173,27 +176,31 @@ class Bullet:
 
     @keyhandler.register(ARROW_UP_KEY)
     def moveUp(self):
+        utils.clearLine()
+        old_pos = self.pos
         if self.pos - 1 < 0:
-            return
+            self.pos = len(self.choices) - 1
+            self.printBullet(old_pos)
+            utils.moveCursorDown(len(self.choices) - 1)
         else:
-            utils.clearLine()
-            old_pos = self.pos
             self.pos -= 1
             self.printBullet(old_pos)
             utils.moveCursorUp(1)
-            self.printBullet(self.pos)
+        self.printBullet(self.pos)
 
     @keyhandler.register(ARROW_DOWN_KEY)
     def moveDown(self):
+        utils.clearLine()
+        old_pos = self.pos
         if self.pos + 1 >= len(self.choices):
-            return
+            self.pos = 0
+            self.printBullet(old_pos)
+            utils.moveCursorUp(len(self.choices) - 1)
         else:
-            utils.clearLine()
-            old_pos = self.pos
             self.pos += 1
             self.printBullet(old_pos)
             utils.moveCursorDown(1)
-            self.printBullet(self.pos)
+        self.printBullet(self.pos)
 
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
@@ -449,7 +456,7 @@ class Input:
                         utils.forceWrite(' ' * len(result))
                         utils.forceWrite('\b' * len(result))
                 else:
-                    break
+                    return result
         else:
             while True:
                 result = sess.input()
