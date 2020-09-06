@@ -31,6 +31,8 @@
     - [Using `ScrollBar` Object](#topic_16)
 - [More Customization: Extending Existing Prompts](#topic_17)
     - [A List of Default Keyboard Events](#topic_18)
+- [Emojis](#topic_19)
+    - [List of Available Emojis](#topic_20)
 
 # General
 
@@ -54,7 +56,7 @@ cli = Check(check = "√")
 cli = Password(hidden = "*")
 cli = ScrollBar(pointer = "→")
 ```
-> You can also use emojis! 
+> You can also use emojis!
 
 ## Customize Colors<a name="topic_4"></a>
 > It is recommended to EXPLICITLY specify ALL colors for an UI object.
@@ -114,13 +116,13 @@ client = Bullet(**styles.Greece)
 ## ⌨️ Using `Bullet` Object<a name="topic_7"></a>
 > Single-choice prompt.
 - Define `bullet` when initializing `Bullet` object.
-- Move current position up and down using **arrow keys**. 
+- Move current position up and down using **arrow keys**.
 - Returns the chosen item after pressing **enter**.
 
 ## ⌨️ Using `Check` Object<a name="topic_8"></a>
 > Multiple-choice prompt.
 - Define `check` when initializing `Check` object.
-- Move current position up and down using **arrow keys**. 
+- Move current position up and down using **arrow keys**.
 - Check/Un-check an item by pressing **space**.
 - Returns the a list of chosen items after pressing **enter**.
 
@@ -135,7 +137,7 @@ client = Bullet(**styles.Greece)
 - Only enter `y/Y` or `n/N`. Other invalid inputs will be guarded, and the user will be asked to re-enter.
 
 ## ⌨️ Using `Password` Object<a name="topic_11"></a>
-> Enter passwords. 
+> Enter passwords.
 - Define `hidden` when initializing `Password` object. This would be the character shown on the terminal when passwords are entered.
 - In convention, space characters `' '` are guarded and should not be in a password.
 
@@ -199,15 +201,15 @@ Note that `accept()` is the method for **all** prompts to return user input. The
 ## A List of Default Keyboard Events<a name="topic_18"></a>
 > See `./bullet/charDef.py`
 - `LINE_BEGIN_KEY` : Ctrl + H
-- `LINE_END_KEY`: Ctrl + E 
+- `LINE_END_KEY`: Ctrl + E
 - `TAB_KEY`         
 - `NEWLINE_KEY`: Enter
 - `ESC_KEY`         
-- `BACK_SPACE_KEY` 
+- `BACK_SPACE_KEY`
 - `ARROW_UP_KEY`    
 - `ARROW_DOWN_KEY`  
 - `ARROW_RIGHT_KEY`  
-- `ARROW_LEFT_KEY` 
+- `ARROW_LEFT_KEY`
 - `INSERT_KEY`     
 - `DELETE_KEY`   
 - `END_KEY`         
@@ -215,3 +217,164 @@ Note that `accept()` is the method for **all** prompts to return user input. The
 - `PG_DOWN_KEY`    
 - `SPACE_CHAR`
 - `INTERRUPT_KEY`: Ctrl + C
+
+# Emojis<a name="topic_19"></a>
+
+Bullet also supports a number of emojis that you can use in your prompts. Emojis are broken down into groups, such as faces and animals. The current categories available are:
+
+ - `faces`: emoji faces
+ - `animals`: emoji unicode animals
+
+Each category is a python dictionary of emojis where keys are the emoji names:
+
+```python
+from bullet.emojis import animals, faces
+
+faces["face_astonished"]
+# Output: '😲'
+
+animals["animal_ant"]
+# Output: '🐜'
+```
+
+A number of functions also exist chain emoji categories and convert emoji dictionaries into lists:
+
+```python
+from bullet.emojis import get_emojis, list_emojis
+
+## The get_emojis function
+get_emojis() # returns a dictionary of all available emojis
+get_emojis(["faces"]) # returns a dictionary of face emojis
+
+## The list_emojis function
+list_emojis() # returns a list of emojis
+list_emojis(["animals"]) # returns a list of animal emojis
+```
+
+## List of Available Emojis<a name="topic_20"></a>
+
+  - **Faces** - `bullet.emojis.faces`
+    - face_grinning: 😀
+    - face_grinning_with_eyes: 😄
+    - face_beaming_with_eyes: 😁
+    - face_grinning_squinting: 😆
+    - face_grinning_with_sweat: 😅
+    - face_laughing_out_loud: 🤣
+    - face_with_tears_of_joy: 😂
+    - face_slightly_smiling: 🙂
+    - face_winking: 😉
+    - face_with_smiling_eyes: 😊
+    - face_with_heart_eyes: 😍
+    - face_blowing_kiss: 😘
+    - face_with_tounge_out: 😋
+    - face_winking_with_tounge_out: 😜
+    - face_zany: 🤪
+    - face_with_raised_eyebrow: 🤨
+    - face_expressionless: 😑
+    - face_unamused: 😒
+    - face_with_rolling_eyes: 🙄
+    - face_grimacing: 😬
+    - face_pensive: 😔
+    - face_sleepy: 😪
+    - face_sleeping: 😴
+    - face_with_thermometer: 🤒
+    - face_sneezing: 🤧
+    - face_dizzy: 😵
+    - face_worried: 😟
+    - face_astonished: 😲
+    - face_sad_but_relieved: 😥
+    - face_loudly_crying: 😭
+    - face_confounded: 😖
+    - face_downcast_with_sweat: 😓
+    - face_weary: 😩
+    - face_with_steam_from_nose: 😤
+    - face_angry: 😠
+    - face_robot: 🤖
+    - face_alien: 👽
+    - face_ghost: 👻
+    - face_ogre: 👹
+    - face_clown: 🤡
+  - **Animals** - `bullet.emojis.animals`
+    - animal_monkey: 🐒
+    - animal_gorilla: 🦍
+    - animal_orangutan: 🦧
+    - animal_dog: 🐕
+    - animal_guide_dog: 🦮
+    - animal_poodle: 🐩
+    - animal_woolf: 🐺
+    - animal_fox: 🦊
+    - animal_raccoon: 🦝
+    - animal_cat: 🐈
+    - animal_lion: 🦁
+    - animal_tiger: 🐅
+    - animal_leopard: 🐆
+    - animal_horse: 🐎
+    - animal_unicorn: 🦄
+    - animal_zebra: 🦓
+    - animal_deer: 🦌
+    - animal_cow: 🐄
+    - animal_ox: 🐂
+    - animal_water_buffalo: 🐃
+    - animal_pig: 🐖
+    - animal_boar: 🐗
+    - animal_ram: 🐏
+    - animal_ewe: 🐑
+    - animal_goat: 🐐
+    - animal_camel: 🐪
+    - animal_llama: 🦙
+    - animal_giraffe: 🦒
+    - animal_elephant: 🐘
+    - animal_rhinoceros: 🦏
+    - animal_hippopatamus: 🦛
+    - animal_mouse: 🐁
+    - animal_hamster: 🐹
+    - animal_rabbit: 🐇
+    - animal_chipmunk: 🐿️
+    - animal_hedgehog: 🦔
+    - animal_bat: 🦇
+    - animal_bear: 🐻
+    - animal_koala: 🐨
+    - animal_panda: 🐼
+    - animal_sloth: 🦥
+    - animal_otter: 🦦
+    - animal_skunk: 🦨
+    - animal_kangaroo: 🦘
+    - animal_badger: 🦡
+    - animal_turkey: 🦃
+    - animal_chicken: 🐔
+    - animal_chick: 🐤
+    - animal_bird: 🐦
+    - animal_penguin: 🐧
+    - animal_dove: 🕊️
+    - animal_eagle: 🦅
+    - animal_duck: 🦆
+    - animal_swan: 🦢
+    - animal_owl: 🦉
+    - animal_flamingo: 🦩
+    - animal_peacock: 🦚
+    - animal_parrot: 🦜
+    - animal_frog: 🐸
+    - animal_crocodile: 🐊
+    - animal_turtle: 🐢
+    - animal_lizard: 🦎
+    - animal_snake: 🐍
+    - animal_dragon: 🐉
+    - animal_sauropod: 🦕
+    - animal_t_rex: 🦖
+    - animal_whale: 🐋
+    - animal_dolphin: 🐬
+    - animal_fish: 🐟
+    - animal_tropical_fish: 🐠
+    - animal_blowfish: 🐡
+    - animal_shark: 🦈
+    - animal_octopus: 🐙
+    - animal_snail: 🐌
+    - animal_butterfly: 🦋
+    - animal_bug: 🐛
+    - animal_ant: 🐜
+    - animal_honeybee: 🐝
+    - animal_ladybug: 🐞
+    - animal_cricket: 🦗
+    - animal_spider: 🕷️
+    - animal_scorpion: 🦂
+    - animal_mosquito: 🦟
