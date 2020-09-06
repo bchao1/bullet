@@ -247,8 +247,8 @@ get_emojis() # returns a dictionary of all available emojis
 get_emojis(["faces"]) # returns a dictionary of face emojis
 
 ## The list_emojis function
-list_emojis() # returns a list of emojis
-list_emojis(["animals"]) # returns a list of animal emojis
+list_emojis() # a generator that yields all emojis
+list_emojis(["animals"]) # a generator that yields only animal emojis
 ```
 
 ## List of Available Emojis<a name="topic_20"></a>
