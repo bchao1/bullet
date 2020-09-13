@@ -11,4 +11,5 @@ setup(
       author='Mckinsey666',
       license='MIT',
       packages=find_packages(),
-      )
+      python_requires=">=3.6"
+)
