@@ -426,6 +426,8 @@ class Input:
         self.pattern = pattern
     
     def valid(self, ans):
+        if ans is None:
+            return False
         if not bool(re.match(self.pattern, ans)):
             utils.moveCursorUp(1)
             utils.forceWrite(' ' * self.indent + self.prompt + self.default)
