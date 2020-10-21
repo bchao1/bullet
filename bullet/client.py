@@ -1,5 +1,10 @@
 import sys
+from datetime import datetime
+
+from dateutil import parser
+
 from .charDef import *
+from .wrap_text import wrap_text
 from . import colors
 from . import utils
 from . import cursor
@@ -733,3 +738,43 @@ class SlidePrompt:
             utils.clearConsoleUp(d + 1)
             utils.moveCursorDown(1)
         return self.result
+
+class Date(Input):
+    """
+    Custom Input element that attempts to parse the value provided by the user as a date object.
+    Date can be provided in any format recognized by dateutil.parser.
+    """
+
+    def __init__(
+        self,
+        prompt: str,
+        default: datetime = None,
+        str_format: str   = "%m/%d/%Y",
+        indent: int       = 0,
+        word_color: str   = colors.foreground["default"],
+        strip: bool       = False,
+    ):
+        if default:
+            default = default.strftime(str_format)
+        super().__init__(prompt, default, indent, word_color, strip, "")
+
+    def launch(self):
+        while True:
+            result = super().launch()
+            if not result:
+                continue
+            try:
+                parsed_date = parser.parse(result)
+                return parsed_date
+            except ValueError:
+                error = (
+                    "Error! '" + result + "' could not be parsed as a valid date.\n"
+                )
+                help = (
+                    "You can use any format recognized by dateutil.parser. For example, all of "
+                    "the strings below are valid ways to represent the same date:\n"
+                )
+                examples = '\n"2018-5-13" -or- "05/13/2018" -or- "May 13 2018"\n'
+                utils.cprint(error, color=colors.bright(colors.foreground["red"]))
+                utils.cprint(wrap_text(help, max_len=70), color=colors.foreground["red"])
+                utils.cprint(examples, color=colors.foreground["red"])
