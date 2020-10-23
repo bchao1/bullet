@@ -1,7 +1,7 @@
 import sys
-from datetime import datetime
+from datetime import date
 
-from dateutil import parser
+from dateutil import parser as date_parser
 
 from .charDef import *
 from .wrap_text import wrap_text
@@ -740,23 +740,32 @@ class SlidePrompt:
         return self.result
 
 class Date(Input):
-    """
-    Custom Input element that attempts to parse the value provided by the user as a date object.
-    Date can be provided in any format recognized by dateutil.parser.
-    """
+    ''' Prompt user for a `date` value until successfully parsed.
+
+    String provided by user can be provided in any format recognized by
+    `dateutil.parser`.
+
+    Args:
+        prompt (str): Required. Text to display to user before input prompt.
+        default (date): Optional. Default `date` value if user provides no
+            input.
+        format_str (str): Format string used to display default value,
+            defaults to '%m/%d/%Y'
+        indent (int): Distance between left-boundary and start of prompt.
+        word_color (str): Optional. The color of the prompt and user input.
+    '''
 
     def __init__(
         self,
         prompt: str,
-        default: datetime = None,
-        str_format: str   = "%m/%d/%Y",
+        default: date     = None,
+        format_str: str   = "%m/%d/%Y",
         indent: int       = 0,
         word_color: str   = colors.foreground["default"],
-        strip: bool       = False,
     ):
         if default:
-            default = default.strftime(str_format)
-        super().__init__(prompt, default, indent, word_color, strip, "")
+            default = default.strftime(format_str)
+        super().__init__(prompt, default=default, indent=indent, word_color=word_color)
 
     def launch(self):
         while True:
@@ -764,12 +773,10 @@ class Date(Input):
             if not result:
                 continue
             try:
-                parsed_date = parser.parse(result)
-                return parsed_date
+                date = date_parser.parse(result)
+                return date.date()
             except ValueError:
-                error = (
-                    "Error! '" + result + "' could not be parsed as a valid date.\n"
-                )
+                error = f"Error! '{result}' could not be parsed as a valid date.\n"
                 help = (
                     "You can use any format recognized by dateutil.parser. For example, all of "
                     "the strings below are valid ways to represent the same date:\n"

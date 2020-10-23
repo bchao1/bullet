@@ -4,15 +4,16 @@ WORD_REGEX = re.compile(r"\s?(?P<word>\b\w+\b)\s?")
 
 
 def wrap_text(s: str, max_len: int):
-    """Wrap text at word boundaries.
+    ''' Wrap text at word boundaries.
+
     Args:
         s (str): The string to be wrapped.
         max_len (int): Maximum length of each substring
     Returns:
-        str: String that will display a multiline string where the length of
-            each line is less than or equal to  max_len. Wrapping will not
-            occur in the middle of a word for prettier output.
-    """
+        str: Multiline string where the length of each line is less than or
+            equal to `max_len`. Wrapping will not occur in the middle of a
+            word for prettier output.
+    '''
     substrings = []
     while True:
         if len(s) <= max_len:
