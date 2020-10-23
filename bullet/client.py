@@ -1,5 +1,10 @@
 import sys
+from datetime import date
+
+from dateutil import parser as date_parser
+
 from .charDef import *
+from .wrap_text import wrap_text
 from . import colors
 from . import utils
 from . import cursor
@@ -733,3 +738,50 @@ class SlidePrompt:
             utils.clearConsoleUp(d + 1)
             utils.moveCursorDown(1)
         return self.result
+
+class Date(Input):
+    ''' Prompt user for a `date` value until successfully parsed.
+
+    String provided by user can be provided in any format recognized by
+    `dateutil.parser`.
+
+    Args:
+        prompt (str): Required. Text to display to user before input prompt.
+        default (date): Optional. Default `date` value if user provides no
+            input.
+        format_str (str): Format string used to display default value,
+            defaults to '%m/%d/%Y'
+        indent (int): Distance between left-boundary and start of prompt.
+        word_color (str): Optional. The color of the prompt and user input.
+    '''
+
+    def __init__(
+        self,
+        prompt: str,
+        default: date     = None,
+        format_str: str   = "%m/%d/%Y",
+        indent: int       = 0,
+        word_color: str   = colors.foreground["default"],
+    ):
+        if default:
+            default = default.strftime(format_str)
+        super().__init__(prompt, default=default, indent=indent, word_color=word_color)
+
+    def launch(self):
+        while True:
+            result = super().launch()
+            if not result:
+                continue
+            try:
+                date = date_parser.parse(result)
+                return date.date()
+            except ValueError:
+                error = f"Error! '{result}' could not be parsed as a valid date.\n"
+                help = (
+                    "You can use any format recognized by dateutil.parser. For example, all of "
+                    "the strings below are valid ways to represent the same date:\n"
+                )
+                examples = '\n"2018-5-13" -or- "05/13/2018" -or- "May 13 2018"\n'
+                utils.cprint(error, color=colors.bright(colors.foreground["red"]))
+                utils.cprint(wrap_text(help, max_len=70), color=colors.foreground["red"])
+                utils.cprint(examples, color=colors.foreground["red"])

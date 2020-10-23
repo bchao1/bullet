@@ -11,5 +11,6 @@ setup(
       author='Mckinsey666',
       license='MIT',
       packages=find_packages(),
-      python_requires=">=3.6"
+      python_requires=">=3.6",
+      install_requires=["python-dateutil"],
 )

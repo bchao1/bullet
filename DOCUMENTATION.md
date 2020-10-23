@@ -25,12 +25,13 @@
     - [Using `YesNo` Object](#topic_10)
     - [Using `Password` Object](#topic_11)
     - [Using `Numbers` Object](#topic_12)
-    - [Using Prompt Objects](#topic_13)
-        - [Using `VerticalPrompt` Object](#topic_14)
-        - [Using `SlidePrompt` Object](#topic_15)
-    - [Using `ScrollBar` Object](#topic_16)
-- [More Customization: Extending Existing Prompts](#topic_17)
-    - [A List of Default Keyboard Events](#topic_18)
+    - [Using `Date` Object](#topic_13)
+    - [Using Prompt Objects](#topic_14)
+        - [Using `VerticalPrompt` Object](#topic_15)
+        - [Using `SlidePrompt` Object](#topic_16)
+    - [Using `ScrollBar` Object](#topic_17)
+- [More Customization: Extending Existing Prompts](#topic_18)
+    - [A List of Default Keyboard Events](#topic_19)
 
 # General
 
@@ -144,10 +145,17 @@ client = Bullet(**styles.Greece)
 - Non-numeric values will be guarded, and the user will be asked to re-enter.
 - Define `type` to cast return value. For example, `type = float`, will cast return value to `float`.
 
-## ⌨️ Using `Prompt` Objects<a name="topic_13"></a>
+## ⌨️ Using `Date` Objects<a name="topic_13"></a>
+> Enter date values
+- Values will be [parsed with `dateutil.parser`](https://dateutil.readthedocs.io/en/stable/parser.html), which is capable of handling strings in many different formats (e.g., "2020-8-21", "08/21/2020", or "Aug 21 2020" would all be parsed as the same date).
+- If the value provided cannot be parsed, the user will be asked to re-enter.
+- Returns a `datetime.date` object
+- `format_str: str`: [Format string](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) used to display default value, defaults to `%m/%d/%Y`
+
+## ⌨️ Using `Prompt` Objects<a name="topic_14"></a>
 > Wrapping it all up.
 
-### Using `VerticalPrompt` Object<a name="topic_14"></a>
+### Using `VerticalPrompt` Object<a name="topic_15"></a>
 - Stack `bullet` UI components into one vertically-rendered prompt.
 - Returns a list of tuples `(prompt, result)`.
 - `spacing`: number of lines between adjacent UI components.
@@ -169,20 +177,20 @@ cli = VerticalPrompt(
 result = cli.launch()
 ```
 
-### Using  `SlidePrompt` Object<a name="topic_15"></a>
+### Using  `SlidePrompt` Object<a name="topic_16"></a>
 - Link `bullet` UI components into a multi-stage prompt. Previous prompts will be cleared upon entering the next stage.
 - Returns a list of tuples `(prompt, result)`.
 
 > For `Prompt` ojects, call `summarize()` after launching the prompt to print out user input.
 
-## ⌨️ Using `ScrollBar` Object<a name="topic_16"></a>
+## ⌨️ Using `ScrollBar` Object<a name="topic_17"></a>
 > **Enhanced `Bullet`**: Too many items? It's OK!
 - `pointer`: points to item currently selected.
 - `up_indicator`, `down_indicator`: indicators shown in first and last row of the rendered items.
 - `height`: maximum items rendered on terminal.
     - For example, your can have 100 choices (`len(choices) = 100`) but define `height = 5`.
 
-# More Customization: Extending Existing Prompts<a name="topic_17"></a>
+# More Customization: Extending Existing Prompts<a name="topic_18"></a>
 > See `./examples/check.py` for the big picture of what's going on.
 
 In `bullet`, you can easily inherit a base class (existing `bullet` objects) and create your customized prompt. This is done by introducing the `keyhandler` module to register user-defined keyboard events.
@@ -196,22 +204,22 @@ def accept(self):
     # do some validation checks: chosen items >= 1 and <= 3.
 ```
 Note that `accept()` is the method for **all** prompts to return user input. The binded keyboard event by default is `NEWLINE_KEY` pressed.
-## A List of Default Keyboard Events<a name="topic_18"></a>
+## A List of Default Keyboard Events<a name="topic_19"></a>
 > See `./bullet/charDef.py`
 - `LINE_BEGIN_KEY` : Ctrl + H
-- `LINE_END_KEY`: Ctrl + E 
-- `TAB_KEY`         
+- `LINE_END_KEY`: Ctrl + E
+- `TAB_KEY`
 - `NEWLINE_KEY`: Enter
-- `ESC_KEY`         
-- `BACK_SPACE_KEY` 
-- `ARROW_UP_KEY`    
-- `ARROW_DOWN_KEY`  
-- `ARROW_RIGHT_KEY`  
-- `ARROW_LEFT_KEY` 
-- `INSERT_KEY`     
-- `DELETE_KEY`   
-- `END_KEY`         
-- `PG_UP_KEY`      
-- `PG_DOWN_KEY`    
+- `ESC_KEY`
+- `BACK_SPACE_KEY`
+- `ARROW_UP_KEY`
+- `ARROW_DOWN_KEY`
+- `ARROW_RIGHT_KEY`
+- `ARROW_LEFT_KEY`
+- `INSERT_KEY`
+- `DELETE_KEY`
+- `END_KEY`
+- `PG_UP_KEY`
+- `PG_DOWN_KEY`
 - `SPACE_CHAR`
 - `INTERRUPT_KEY`: Ctrl + C
