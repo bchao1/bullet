@@ -1,9 +1,11 @@
 import sys
+from collections import defaultdict
 from .charDef import *
 from . import colors
 from . import utils
 from . import cursor
 from . import keyhandler
+from .exceptions import MissingDependenciesError
 import readline
 import re
 
@@ -363,6 +365,83 @@ class Check:
                 ret = self.handle_input()
                 if ret is not None:
                     return ret
+
+
+class CheckDependencies(Check):
+    """Extend Check to follow dependencies."""
+
+    def __init__(self, prompt="", dep_tree=(), *args, **kwargs):
+        """Extract choices from dep_tree.
+
+        dep_tree expected format:
+        (
+            ("choice A", ("choice C", "Choice D")),
+            ("choice B", ("choice A", "Choice E")),
+            ("choice C", ()),
+            ("choice D", ("choice C",)),
+            ("choice E", ("choice B",)),
+
+        #    ^choices^    ^dependencies list^
+        )
+        """
+        self.validateDependencies(dep_tree)
+        self.dependencies = {k: v for k, v in dep_tree}
+        self.dependants = defaultdict(set)
+        for k, deps in dep_tree:
+            for d in deps:
+                self.dependants[d].add(k)
+        choices = [c[0] for c in dep_tree]
+        super().__init__(prompt=prompt, choices=choices, *args, **kwargs)
+
+    def validateDependencies(self, dep_tree):
+        missing_dependencies = []
+        items = [item for item, dependencies in dep_tree]
+        for item, dependencies in dep_tree:
+            for dep in dependencies:
+                if dep not in items:
+                    missing_dependencies.append((item, dep))
+        if missing_dependencies:
+            raise MissingDependenciesError(missing_dependencies)
+
+    @keyhandler.register(SPACE_CHAR)
+    def toggleRow(self):
+        super().toggleRow()
+        if self.checked[self.pos]:
+            self.checkDependencies(self.choices[self.pos])
+        else:
+            self.uncheckDependants(self.choices[self.pos])
+        self.refresh()
+
+    def checkDependencies(self, choice, checks=None):
+        checks = checks or [choice]
+        deps = self.dependencies[choice]
+        for dep in deps:
+            if self.checked[self.choices.index(dep)] not in checks:
+                self.checked[self.choices.index(dep)] = True
+                checks.append(self.checked[self.choices.index(dep)])
+                self.checkDependencies(dep, checks)
+
+    def uncheckDependants(self, choice, unchecks=None):
+        unchecks = unchecks or [choice]
+        deps = self.dependants[choice]
+        for dep in deps:
+            if self.checked[self.choices.index(dep)] not in unchecks:
+                self.checked[self.choices.index(dep)] = False
+                unchecks.append(self.checked[self.choices.index(dep)])
+                self.uncheckDependants(dep, unchecks)
+
+    def refresh(self):
+        if not self.pos == 0:
+            utils.moveCursorUp(self.pos)
+        utils.clearLine()
+        self.printRow(0)
+        for pos in range(1, len(self.choices)):
+            utils.moveCursorDown(0)
+            utils.clearLine()
+            self.printRow(pos)
+        if not self.pos == len(self.choices) - 1:
+            utils.moveCursorUp(len(self.choices) - self.pos - 1)
+
 
 class YesNo:
     def __init__(
