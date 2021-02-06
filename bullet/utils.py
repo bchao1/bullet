@@ -127,4 +127,4 @@ def is_printable(s: str) -> bool:
             characters in `s` can not be printed.
     """
     # Ref: https://stackoverflow.com/a/50731077
-    return not any(repr(ch).startswith("'\\x") or repr(ch).startswith("'\\u") for ch in s)
+    return not any(repr(ch).startswith(("'\\x", "'\\u")) for ch in s)
