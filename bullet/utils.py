@@ -1,6 +1,5 @@
 import os
 import sys
-import tty, termios
 import string
 import shutil
 from .charDef import *
@@ -10,13 +9,44 @@ COLUMNS, _ = shutil.get_terminal_size()  ## Size of console
 
 def mygetc():
     ''' Get raw characters from input. '''
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(fd)
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    if os.name == 'nt':
+        import msvcrt
+        encoding = "mbcs"
+        # Flush the keyboard buffer
+        while msvcrt.kbhit():
+            msvcrt.getwch()
+        if (len(WIN_CH_BUFFER) == 0):
+            # Read the keystroke
+            ch = msvcrt.getwch()
+            # If it is a prefix char, get second part
+            if ch.encode(encoding) in (b"\x00", b"\xe0"):
+                ch2 = ch + msvcrt.getwch()
+                # Translate actual Win chars to bullet char types
+                try:
+                    chx = chr(WIN_CHAR_MAP[ch2.encode(encoding)])
+                    WIN_CH_BUFFER.append(chr(MOD_KEY_INT))
+                    WIN_CH_BUFFER.append(chx)
+                    if ord(chx) in (INSERT_KEY - MOD_KEY_FLAG,
+                                    DELETE_KEY - MOD_KEY_FLAG,
+                                    PG_UP_KEY - MOD_KEY_FLAG,
+                                    PG_DOWN_KEY - MOD_KEY_FLAG):
+                        WIN_CH_BUFFER.append(chr(MOD_KEY_DUMMY))
+                    ch = chr(ESC_KEY)
+                except KeyError:
+                    ch = ch2[1]
+            else:
+                pass
+        else:
+            ch = WIN_CH_BUFFER.pop(0)
+    elif os.name == 'posix':
+        import tty, termios
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
 def getchar():
@@ -29,7 +59,7 @@ def getchar():
        ord(c) == NEWLINE_KEY:
        return c
     
-    elif ord(c) == BACK_SPACE_KEY:
+    elif ord(c) == BACK_SPACE_KEY or ord(c) == BACK_SPACE_CHAR:
         return c
     
     elif ord(c) == ESC_KEY:
@@ -37,11 +67,15 @@ def getchar():
         if ord(combo) == MOD_KEY_INT:
             key = mygetc()
             if ord(key) >= MOD_KEY_BEGIN - MOD_KEY_FLAG and ord(key) <= MOD_KEY_END - MOD_KEY_FLAG:
-                if ord(mygetc()) == MOD_KEY_DUMMY:
+                if ord(key) in (HOME_KEY - MOD_KEY_FLAG, END_KEY - MOD_KEY_FLAG):
                     return chr(ord(key) + MOD_KEY_FLAG)
                 else:
-                    return UNDEFINED_KEY
-            elif ord(key) >= ARROW_KEY_BEGIN - ARROW_KEY_FLAG and ord(key) <= ARROW_KEY_END - ARROW_KEY_FLAG:
+                    trail = mygetc()
+                    if ord(trail) == MOD_KEY_DUMMY:
+                        return chr(ord(key) + MOD_KEY_FLAG)
+                    else:
+                        return UNDEFINED_KEY
+            elif ARROW_KEY_BEGIN - ARROW_KEY_FLAG <= ord(key) <= ARROW_KEY_END - ARROW_KEY_FLAG:
                 return chr(ord(key) + ARROW_KEY_FLAG)
             else:
                 return UNDEFINED_KEY

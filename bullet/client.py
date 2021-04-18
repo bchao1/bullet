@@ -4,7 +4,6 @@ from . import colors
 from . import utils
 from . import cursor
 from . import keyhandler
-import readline
 import re
 
 # Reusable private utility class
@@ -90,7 +89,7 @@ class myInput:
                  i == TAB_KEY        or \
                  i == UNDEFINED_KEY:
                 return
-            elif i == BACK_SPACE_KEY:
+            elif i == BACK_SPACE_KEY or i == BACK_SPACE_CHAR:
                 if self.moveCursor(self.pos - 1):
                     self.deleteChar()
             elif i == DELETE_KEY:
@@ -113,6 +112,7 @@ class Bullet:
             prompt: str               = "",
             choices: list             = [], 
             bullet: str               = "●", 
+            prompt_color: str         = colors.foreground["default"],
             bullet_color: str         = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
             word_on_switch: str       = colors.REVERSE,
@@ -134,6 +134,7 @@ class Bullet:
             raise ValueError("Margin must be > 0!")
 
         self.prompt = prompt
+        self.prompt_color = prompt_color
         self.choices = choices
         self.pos = 0
 
@@ -195,6 +196,28 @@ class Bullet:
             utils.moveCursorDown(1)
             self.printBullet(self.pos)
 
+    @keyhandler.register(HOME_KEY)
+    def moveTop(self):
+        utils.clearLine()
+        old_pos = self.pos
+        self.pos = 0
+        self.printBullet(old_pos)
+        while old_pos > 0:
+            utils.moveCursorUp(1)
+            old_pos -= 1
+        self.printBullet(self.pos)
+
+    @keyhandler.register(END_KEY)
+    def moveBottom(self):
+        utils.clearLine()
+        old_pos = self.pos
+        self.pos = len(self.choices) - 1
+        self.printBullet(old_pos)
+        while old_pos < len(self.choices) - 1:
+            utils.moveCursorDown(1)
+            old_pos += 1
+        self.printBullet(self.pos)
+
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
@@ -211,7 +234,7 @@ class Bullet:
 
     def launch(self, default = None):
         if self.prompt:
-            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
+            utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET + '\n')
             utils.forceWrite('\n' * self.shift)
         if default is not None:
             if type(default).__name__ != 'int':
@@ -234,6 +257,7 @@ class Check:
             prompt: str               = "",
             choices: list             = [], 
             check: str                = "√", 
+            prompt_color: str         = colors.foreground["default"],
             check_color: str          = colors.foreground["default"],
             check_on_switch: str      = colors.REVERSE,
             word_color: str           = colors.foreground["default"],
@@ -256,6 +280,7 @@ class Check:
             raise ValueError("Margin must be > 0!")
 
         self.prompt = prompt
+        self.prompt_color = prompt_color
         self.choices = choices
         self.checked = [False] * len(self.choices)
         self.pos = 0
@@ -325,6 +350,28 @@ class Check:
             utils.moveCursorDown(1)
             self.printRow(self.pos)
 
+    @keyhandler.register(HOME_KEY)
+    def moveTop(self):
+        utils.clearLine()
+        old_pos = self.pos
+        self.pos = 0
+        self.printRow(old_pos)
+        while old_pos > 0:
+            utils.moveCursorUp(1)
+            old_pos -= 1
+        self.printRow(self.pos)
+
+    @keyhandler.register(END_KEY)
+    def moveBottom(self):
+        utils.clearLine()
+        old_pos = self.pos
+        self.pos = len(self.choices) - 1
+        self.printRow(old_pos)
+        while old_pos < len(self.choices) - 1:
+            utils.moveCursorDown(1)
+            old_pos += 1
+        self.printRow(self.pos)
+
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
         utils.moveCursorDown(len(self.choices) - self.pos)
@@ -343,7 +390,7 @@ class Check:
 
     def launch(self, default = None):
         if self.prompt:
-            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
+            utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET + '\n')
             utils.forceWrite('\n' * self.shift)
         if default is None:
             default = []
@@ -367,11 +414,12 @@ class Check:
 class YesNo:
     def __init__(
             self,
-            prompt,
-            default="y",
-            indent=0,
-            word_color=colors.foreground["default"],
-            prompt_prefix="[y/n] "
+            prompt: str             = "",
+            default: str            = "y",
+            indent: int             = 0,
+            prompt_color: str       = colors.foreground["default"],
+            word_color: str         = colors.foreground["default"],
+            prompt_prefix: str      = "[y/n] "
         ):
         self.indent = indent
         if not prompt:
@@ -380,6 +428,7 @@ class YesNo:
             raise ValueError("`default` can only be 'y' or 'n'!")
         self.default = "[{}]".format(default.lower())
         self.prompt = prompt_prefix + prompt
+        self.prompt_color = prompt_color
         self.word_color = word_color
 
     def valid(self, ans):
@@ -388,15 +437,15 @@ class YesNo:
         ans = ans.lower()
         if "yes".startswith(ans) or "no".startswith(ans):
             return True
-        utils.moveCursorUp(1)
-        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
+        utils.moveCursorUp(self.prompt.count("\n") + 1)
+        utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + self.default + colors.RESET)
         utils.forceWrite(' ' * len(ans))
         utils.forceWrite('\b' * len(ans))
         return False
 
     def launch(self):
         my_input = myInput(word_color = self.word_color)
-        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
+        utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + self.default + colors.RESET)
         while True:
             ans = my_input.input()
             if ans == "":
@@ -409,25 +458,25 @@ class YesNo:
 class Input:
     def __init__(
             self, 
-            prompt,
-            default = "",
-            indent = 0, 
-            word_color = colors.foreground["default"],
-            strip = False,
-            pattern = ""
+            prompt : str               = "",
+            default: str               = "",
+            indent: int                = 0, 
+            prompt_color: str          = colors.foreground["default"],
+            word_color: str            = colors.foreground["default"],
+            strip: bool                = False,
+            pattern: str               = ""
         ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.default = "[{}]".format(default) if default else ""
         self.prompt = prompt
+        self.prompt_color = prompt_color
         self.word_color = word_color
         self.strip = strip
         self.pattern = pattern
     
     def valid(self, ans):
-        if ans is None:
-            return False
         if not bool(re.match(self.pattern, ans)):
             utils.moveCursorUp(1)
             utils.forceWrite(' ' * self.indent + self.prompt + self.default)
@@ -437,7 +486,7 @@ class Input:
         return True
 
     def launch(self):
-        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
+        utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + self.default + colors.RESET)
         sess = myInput(word_color = self.word_color)
         if not self.pattern:
             while True:
@@ -447,7 +496,7 @@ class Input:
                         return self.default[1:-1]
                     else:
                         utils.moveCursorUp(1)
-                        utils.forceWrite(' ' * self.indent + self.prompt + self.default)
+                        utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + self.default + colors.RESET)
                         utils.forceWrite(' ' * len(result))
                         utils.forceWrite('\b' * len(result))
                 else:
@@ -462,12 +511,14 @@ class Input:
 class Password:
     def __init__(
             self, 
-            prompt, 
-            indent = 0, 
-            hidden = '*', 
-            word_color = colors.foreground["default"]
+            prompt: str              = "", 
+            indent: int              = 0, 
+            hidden: str              = '*', 
+            prompt_color: str        = colors.foreground["default"],
+            word_color: str          = colors.foreground["default"]
         ):
         self.indent = indent
+        self.prompt_color = prompt_color
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
@@ -475,21 +526,23 @@ class Password:
         self.word_color = word_color
         
     def launch(self):
-        utils.forceWrite(' ' * self.indent + self.prompt)
+        utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET)
         return myInput(password = True, hidden = self.hidden, word_color = self.word_color).input()
 
 class Numbers:
     def __init__(
             self, 
-            prompt, 
-            indent = 0, 
-            word_color = colors.foreground["default"],
+            prompt: str              = "", 
+            indent: int              = 0, 
+            prompt_color: str        = colors.foreground["default"],
+            word_color: str          = colors.foreground["default"],
             type = float
         ):
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
+        self.prompt_color = prompt_color
         self.word_color = word_color
         self.type = type
     
@@ -499,7 +552,7 @@ class Numbers:
             return True
         except:
             utils.moveCursorUp(1)
-            utils.forceWrite(' ' * self.indent + self.prompt)
+            utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET)
             utils.forceWrite(' ' * len(ans))
             utils.forceWrite('\b' * len(ans))
             return False
@@ -511,7 +564,7 @@ class Numbers:
             except:
                 raise ValueError("`default` should be a " + str(self.type))
         my_input = myInput(word_color = self.word_color)
-        utils.forceWrite(' ' * self.indent + self.prompt)
+        utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET)
         while True:
             ans = my_input.input()
             if ans == "" and default is not None:
@@ -544,6 +597,7 @@ class VerticalPrompt:
             print(prompt, answer)
         
     def launch(self):
+        self.result = []
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
             if not self.separator:
@@ -561,6 +615,7 @@ class ScrollBar:
             pointer                   = "→",
             up_indicator: str         = "↑",
             down_indicator: str       = "↓",
+            prompt_color: str         = colors.foreground["default"],
             pointer_color: str        = colors.foreground["default"],
             indicator_color: str      = colors.foreground["default"],
             word_color: str           = colors.foreground["default"],
@@ -584,6 +639,7 @@ class ScrollBar:
             raise ValueError("Margin must be > 0!")
 
         self.prompt = prompt
+        self.prompt_color = prompt_color
         self.choices = choices
         self.pos = 0 # Position of item at current cursor.
 
@@ -615,7 +671,7 @@ class ScrollBar:
         self.return_index = return_index
     
     def renderRows(self):
-        self.printRow(self.top, indicator = self.up_indicator if self.top != 0 else '')
+        self.printRow(self.top, indicator = self.up_indicator if self.top != 0 else ' ')
         utils.forceWrite('\n')
 
         i = self.top
@@ -645,7 +701,7 @@ class ScrollBar:
     def moveUp(self):
         if self.pos == self.top:
             if self.top == 0:
-                return # Already reached top-most position
+                return  # Already reached top-most position
             else:
                 utils.clearConsoleDown(self.height)
                 self.pos, self.top = self.pos - 1, self.top - 1
@@ -665,7 +721,7 @@ class ScrollBar:
     def moveDown(self):
         if self.pos == self.top + self.height - 1:
             if self.top + self.height == len(self.choices):
-                return
+                return  # Already reached bottom-most position
             else:
                 utils.clearConsoleUp(self.height)
                 utils.moveCursorDown(1)
@@ -681,6 +737,67 @@ class ScrollBar:
             utils.moveCursorDown(1)
             self.printRow(self.pos)
 
+    @keyhandler.register(HOME_KEY)
+    def moveTop(self):
+        if self.pos == self.top:
+            if self.top == 0:
+                return  # Already reached top-most position
+            else:
+                pass  # Not at top-most position
+        else:
+            utils.moveCursorUp(self.pos - self.top)
+        utils.clearConsoleDown(self.height)
+        self.pos = self.top = 0
+        self.renderRows()
+        utils.moveCursorUp(self.height)
+
+    @keyhandler.register(END_KEY)
+    def moveBottom(self):
+        if self.pos == self.top + self.height - 1:
+            if self.top + self.height == len(self.choices):
+                return  # Already reached bottom-most position
+            else:
+                pass  # Not already at bottm-most position
+        else:
+            utils.moveCursorDown(self.height - (self.pos - self.top + 1))
+        utils.clearConsoleUp(self.height)
+        utils.moveCursorDown(1)
+        self.top = len(self.choices) - self.height
+        self.pos = len(self.choices) - 1
+        self.renderRows()
+        utils.moveCursorUp(1)
+
+    @keyhandler.register(PG_UP_KEY)
+    def movePgUp(self):
+        if self.pos == self.top:
+            if self.top == 0:
+                return  # Already reached top-most position
+            else:
+                pass  # Not at top-most position
+        else:
+            utils.moveCursorUp(self.pos - self.top)
+        utils.clearConsoleDown(self.height)
+        self.top = max(0, self.top - self.height)
+        self.pos = max(0, self.pos - self.height)
+        self.renderRows()
+        utils.moveCursorUp(self.height - (self.pos - self.top))
+
+    @keyhandler.register(PG_DOWN_KEY)
+    def movePgDown(self):
+        if self.pos == self.top + self.height - 1:
+            if self.top + self.height == len(self.choices):
+                return  # Already reached bottom-most position
+            else:
+                utils.moveCursorDown(self.height - (self.pos - self.top + 1))
+        else:
+            utils.moveCursorDown(self.height - (self.pos - self.top + 1))
+        utils.clearConsoleUp(self.height)
+        utils.moveCursorDown(1)
+        self.top = min(len(self.choices) - self.height, self.top + self.height)
+        self.pos = min(len(self.choices) - 1, self.pos + self.height)
+        self.renderRows()
+        utils.moveCursorUp(1 + self.height - (self.pos - self.top + 1))
+
     @keyhandler.register(NEWLINE_KEY)
     def accept(self):
         d = self.top + self.height - self.pos
@@ -690,7 +807,7 @@ class ScrollBar:
             return ret, self.pos
         self.pos = 0
         return ret
-
+    
     @keyhandler.register(INTERRUPT_KEY)
     def interrupt(self):
         d = self.top + self.height - self.pos
@@ -699,7 +816,7 @@ class ScrollBar:
 
     def launch(self):
         if self.prompt:
-            utils.forceWrite(' ' * self.indent + self.prompt + '\n')
+            utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET + '\n')
             utils.forceWrite('\n' * self.shift)
         self.renderRows()
         utils.moveCursorUp(self.height)
