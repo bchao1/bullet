@@ -4,7 +4,7 @@ from bullet import colors
 
 cli = ScrollBar(
     "How are you feeling today? ", 
-    emojis.feelings[0],
+    emojis.feelings,
     height = 5,
     align = 5,
     margin = 0,
