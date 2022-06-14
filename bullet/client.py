@@ -99,6 +99,8 @@ class myInput:
                 self.moveCursor(self.pos + 1)
             elif i == ARROW_LEFT_KEY:
                 self.moveCursor(self.pos - 1)
+            elif i == INTERRUPT_KEY:
+                raise KeyboardInterrupt
             else:
                 if self.password:
                     if c != ' ':
